@@ -1,0 +1,3007 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <script>
+    if (!sessionStorage.getItem('userAccount') && !localStorage.getItem('userAccount')) {
+      window.location.replace('https://norabim.com/inse.html');
+    }
+  </script>
+
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Administrar Información | nora CDE</title>
+  <meta name="theme-color" content="#2b2b2b" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: '#171717',
+            'background-light': '#FFFFFF',
+            'background-dark': '#1e1e1e',
+            'text-light': '#111827',
+            'text-dark': '#F3F4F6',
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          },
+        },
+      },
+    };
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
+  <link rel="icon" href="https://i.postimg.cc/W3trgjZX/FAVICON-NORA-NEGRO.png" type="image/png" />
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+    .glass {
+      background: rgba(255, 255, 255, 0.72);
+      border: 1px solid rgba(17, 24, 39, 0.08);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+    }
+    .dark .glass {
+      background: rgba(30, 41, 59, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .drag-over {
+      border-color: #3b82f6 !important;
+      background-color: rgba(59, 130, 246, 0.04) !important;
+    }
+    .dark .drag-over {
+      background-color: rgba(59, 130, 246, 0.1) !important;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-text-light dark:bg-slate-950 dark:text-text-dark min-h-screen flex flex-col transition-colors duration-300">
+  <div id="page-shell" class="flex-1 flex flex-col">
+    <!-- Header -->
+    <header class="w-full z-20 px-4 sm:px-6 lg:px-8 py-3.5 bg-white/80 dark:bg-slate-900/80 border-b border-slate-200 dark:border-slate-800 backdrop-blur-md">
+      <div class="w-full flex items-center justify-between">
+        <div class="flex items-center gap-4 sm:gap-6">
+          <button id="back-btn" aria-label="Volver" class="rounded-lg border border-slate-200 bg-white/80 px-2 py-1 hover:bg-slate-100 transition-colors dark:bg-slate-800 dark:border-slate-700 dark:hover:bg-slate-700">
+            <span class="material-symbols-outlined text-[16px] text-slate-800 dark:text-slate-200 align-middle">arrow_back</span>
+          </button>
+          <span class="text-xs font-bold tracking-[0.2em] uppercase text-slate-500 dark:text-slate-400">Administrar Información</span>
+        </div>
+
+        <div class="hidden items-center gap-4 text-[10px] font-bold tracking-widest text-[#111827] dark:text-white uppercase sm:flex">
+          <span id="header-date">--</span>
+          <div class="h-4 w-[1px] bg-slate-300 dark:bg-slate-600"></div>
+          <span id="project-now">--:--</span>
+        </div>
+
+        <div class="flex items-center gap-4">
+          <a href="/CONVERTIR_FRAG/index.html" target="_blank" rel="noopener noreferrer" aria-label="Abrir Convertidor FRAG" class="hidden sm:inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-amber-600 dark:text-amber-400 hover:text-amber-700 dark:hover:text-amber-300 transition-colors px-2 py-1 rounded-lg border border-amber-200/60 dark:border-amber-800/30 bg-amber-50/50 dark:bg-amber-950/20" title="Convertidor IFC a FRAG">
+            <span class="material-symbols-outlined text-[16px]">change_circle</span>
+            <span class="hidden lg:inline">FRAG</span>
+          </a>
+          <button id="theme-toggle" aria-label="Cambiar tema" class="text-[#111827] dark:text-white hover:text-slate-600 transition-colors">
+            <span class="material-symbols-outlined text-[16px]">dark_mode</span>
+          </button>
+          <div id="auth-container" class="flex items-center text-xs font-bold uppercase tracking-widest text-[#111827] dark:text-white">
+            <!-- User info injected by JS -->
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 w-full px-3 sm:px-6 lg:px-8 py-5 sm:py-6 flex flex-col gap-6">
+      <!-- Upload Card -->
+      <div class="w-full glass rounded-2xl p-6 sm:p-8 shadow-xl transition-all duration-300">
+        <!-- Logo and Project name -->
+        <div class="flex flex-col items-center text-center mb-8">
+          <img id="portal-logo-light" alt="nora CDE" class="h-10 w-auto object-contain dark:hidden mb-4" src="https://i.postimg.cc/tR3YSryT/LOGO-NORA-NEGRO.png" />
+          <img id="portal-logo-dark" alt="nora CDE" class="hidden h-10 w-auto object-contain dark:block mb-4" src="https://i.postimg.cc/SQ6JTZqj/LOGO-NORA-BLANCO.png" />
+          
+          <h2 id="project-title" class="text-2xl font-extrabold tracking-tight text-slate-900 dark:text-white sm:text-3xl">
+            Administrar Archivos del Proyecto
+          </h2>
+          <p id="project-subtitle" class="mt-2 text-sm text-slate-500 dark:text-slate-400">
+            Cargando detalles del proyecto...
+          </p>
+        </div>
+
+        <!-- Project Selector (Only visible if not pre-locked via URL params) -->
+        <div id="project-select-container" class="mb-6 hidden">
+          <label for="project-select" class="block text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400 mb-2">Proyecto Destino</label>
+          <select id="project-select" class="w-full rounded-lg border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-sm text-slate-900 dark:text-white focus:border-blue-500 focus:ring-blue-500">
+            <!-- Dynamic project list -->
+          </select>
+        </div>
+
+        <!-- Drag and Drop Area -->
+        <div id="drop-zone" class="border-2 border-dashed border-slate-300 dark:border-slate-700 rounded-xl p-8 text-center cursor-pointer hover:border-slate-400 dark:hover:border-slate-500 transition-all duration-200">
+          <input type="file" id="file-input" class="hidden" accept=".frag,.json,.ifc,.bcf,.bcfzip,.rvt,.rfa,.rte,.pln,.pla,.mod,.nwc,.nwf,.nwd,.smc,.dgn,.imodel,.vwx,.ndw,.cyp,.dwg,.dxf,.pdf,.e57,.pts,.xyz,.las,.laz,.rcp,.rcs,.landxml,.citygml,.xml,.cobie,.xlsx,.bc3" multiple />
+          <div class="flex flex-col items-center">
+            <span class="material-symbols-outlined text-4xl text-slate-400 dark:text-slate-500 mb-3 animate-pulse">cloud_upload</span>
+            <p class="text-sm font-semibold text-slate-700 dark:text-slate-300">Arrastra tus archivos aquí o haz clic para buscarlos</p>
+            <p class="text-xs text-slate-400 dark:text-slate-500 mt-1">Formatos admitidos: IFC, BCF, RVT, RFA, NWC, NWD, DWG, DXF, PDF, PLN, DGN, XLSX, E57, LAS y más</p>
+          </div>
+        </div>
+
+        <!-- Global Status Bar (Only visible during multi-upload) -->
+        <div id="global-status-container" class="mt-6 p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white/40 dark:bg-slate-900/40 hidden">
+          <div class="flex justify-between items-center text-xs font-bold uppercase tracking-wider text-slate-600 dark:text-slate-300 mb-2">
+            <span id="global-status-text">Subiendo archivos...</span>
+            <span id="global-status-percentage">0%</span>
+          </div>
+          <div class="w-full bg-slate-200 dark:bg-slate-800 h-2.5 rounded-full overflow-hidden">
+            <div id="global-progress-bar" class="bg-blue-600 h-full w-[0%] transition-all duration-300"></div>
+          </div>
+        </div>
+
+        <!-- Selected Files List Container -->
+        <div id="files-list-container" class="mt-6 space-y-4 max-h-[300px] overflow-y-auto hidden">
+          <h3 class="text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400">Cola de Carga</h3>
+          <div id="selected-files-list" class="space-y-3">
+            <!-- Selected file items injected here -->
+          </div>
+        </div>
+
+        <!-- Log Panel (Only visible during uploads) -->
+        <div id="log-card" class="mt-4 hidden">
+          <label class="block text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400 mb-2">Consola de Eventos</label>
+          <div id="log-container" class="border border-slate-200 dark:border-slate-800 bg-slate-900 text-slate-300 dark:bg-slate-950 dark:text-slate-400 rounded-lg p-3 text-[10px] font-mono max-h-[100px] overflow-y-auto">
+            <!-- Terminal logs -->
+          </div>
+        </div>
+
+        <!-- Action Button -->
+        <div class="mt-8 flex justify-end gap-4">
+          <button id="clear-queue-btn" class="hidden rounded-lg border border-slate-200 hover:bg-slate-100 dark:border-slate-700 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold text-xs uppercase tracking-widest px-6 py-3.5 transition-all">
+            Limpiar Cola
+          </button>
+          <button id="upload-btn" class="w-full sm:w-auto rounded-lg bg-[#111827] dark:bg-white text-white dark:text-[#111827] hover:opacity-90 font-bold text-xs uppercase tracking-widest px-8 py-3.5 shadow-md disabled:opacity-50 disabled:cursor-not-allowed transition-all" disabled>
+            Iniciar Subidas
+          </button>
+        </div>
+      </div>
+
+      <!-- Convertidor IFC a FRAG — Panel Colapsable con Iframe Incrustado -->
+      <div id="frag-converter-panel" class="w-full glass rounded-2xl shadow-lg transition-all duration-300 border border-amber-200/60 dark:border-amber-800/30 bg-gradient-to-r from-amber-50/50 to-transparent dark:from-amber-950/20 overflow-hidden">
+        <!-- Persistent Header -->
+        <div class="p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div class="flex items-start gap-4">
+            <div class="flex-shrink-0 w-12 h-12 rounded-xl bg-amber-500/10 dark:bg-amber-500/20 flex items-center justify-center">
+              <span class="material-symbols-outlined text-2xl text-amber-600 dark:text-amber-400">change_circle</span>
+            </div>
+            <div>
+              <h3 class="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                Convertidor IFC a FRAG
+                <span id="frag-converter-badge" class="inline-flex items-center px-2 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider bg-slate-200/70 dark:bg-slate-700/60 text-slate-600 dark:text-slate-300">
+                  Esperando IFC
+                </span>
+              </h3>
+              <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                Utilidad de conversión BIM de alto rendimiento para visualización web. Convierte tus archivos IFC a formato FRAG.
+              </p>
+            </div>
+          </div>
+          <div class="flex items-center gap-2 w-full sm:w-auto">
+            <button id="frag-toggle-btn" onclick="window.toggleFragConverterPanel()" aria-label="Mostrar / ocultar convertidor incrustado" class="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 rounded-lg border border-amber-600/30 hover:bg-amber-100 dark:hover:bg-amber-950/40 text-amber-700 dark:text-amber-300 font-bold text-[11px] uppercase tracking-widest px-4 py-3 transition-all">
+              <span id="frag-toggle-icon" class="material-symbols-outlined text-[18px]">visibility</span>
+              <span id="frag-toggle-label">Mostrar Panel</span>
+            </button>
+            <a href="/CONVERTIR_FRAG/index.html" target="_blank" rel="noopener noreferrer" aria-label="Abrir en nueva pestaña" title="Abrir en pestaña nueva" class="hidden sm:inline-flex items-center justify-center gap-1.5 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 px-3 py-3 transition-all">
+              <span class="material-symbols-outlined text-[18px]">open_in_new</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Collapsible Iframe Section -->
+        <div id="frag-converter-body" class="hidden border-t border-amber-200/50 dark:border-amber-900/40 bg-white/40 dark:bg-slate-900/20 transition-all duration-300">
+          <div id="frag-converter-body-inner" class="p-3 sm:p-4">
+            <!-- Iframe was here previously; we now mount it dynamically to preserve load state -->
+            <div id="integrated-conv-wrap" class="w-full rounded-xl overflow-hidden bg-white border border-slate-200 dark:bg-slate-950 dark:border-slate-800" style="min-height: 720px;">
+              <!-- Loading placeholder -->
+              <div id="integrated-conv-placeholder" class="flex flex-col items-center justify-center h-[720px] text-center p-6 hidden">
+                <div class="w-14 h-14 border-4 border-amber-200 dark:border-amber-800 border-t-amber-500 rounded-full animate-spin mb-4"></div>
+                <p class="text-sm font-semibold text-slate-700 dark:text-slate-200 mb-1">Cargando convertidor…</p>
+                <p class="text-xs text-slate-500 dark:text-slate-400">Por favor espera un momento.</p>
+              </div>
+              <iframe id="integrated-conv-iframe" src="/CONVERTIR_FRAG/index.html" class="w-full border-0" style="height: 720px; display: block;"></iframe>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- End of Converter Panel -->
+
+      <!-- ============================================================ -->
+      <!-- UNIFIED PROJECT FILES & WORKFLOW CARD                        -->
+      <!-- ============================================================ -->
+      <div class="w-full glass rounded-2xl p-8 shadow-xl transition-all duration-300">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+          <div>
+            <h3 class="text-lg font-bold text-slate-900 dark:text-white">Archivos del Proyecto</h3>
+            <p class="text-xs text-slate-500 dark:text-slate-400">Ciclo de vida de la información: En Progreso → Compartido → Publicado.</p>
+          </div>
+          
+          <div class="flex items-center gap-2">
+            <!-- Search bar -->
+            <div class="relative">
+              <span class="material-symbols-outlined absolute left-2.5 top-2 text-slate-400 text-lg">search</span>
+              <input type="text" id="files-search" placeholder="Buscar archivo..." class="w-[200px] pl-9 pr-3 py-1.5 rounded-lg border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-xs text-slate-900 dark:text-white focus:ring-blue-500 focus:border-blue-500" />
+            </div>
+            
+            <button id="refresh-list-btn" class="p-2 rounded-lg border border-slate-200 bg-white dark:bg-slate-800 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors" title="Refrescar lista">
+              <span id="refresh-icon" class="material-symbols-outlined text-[16px] text-slate-700 dark:text-slate-300 align-middle">refresh</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Main State Tabs (En Progreso, Compartido, Publicado) -->
+        <div class="border-b border-slate-200 dark:border-slate-800 mb-5 flex gap-0 text-sm font-semibold overflow-x-auto">
+          <button id="stab-progreso" class="border-b-2 border-amber-500 px-4 py-3 text-amber-600 dark:text-amber-400 transition-all focus:outline-none whitespace-nowrap flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-amber-400 inline-block"></span>
+            En Progreso <span id="scount-progreso" class="text-[10px] px-1.5 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 font-medium ml-1">0</span>
+          </button>
+          <button id="stab-compartido" class="border-b-2 border-transparent px-4 py-3 text-slate-500 hover:text-blue-600 dark:text-slate-400 transition-all focus:outline-none whitespace-nowrap flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-blue-400 inline-block"></span>
+            Compartido <span id="scount-compartido" class="text-[10px] px-1.5 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 font-medium ml-1">0</span>
+          </button>
+          <button id="stab-publicado" class="border-b-2 border-transparent px-4 py-3 text-slate-500 hover:text-green-600 dark:text-slate-400 transition-all focus:outline-none whitespace-nowrap flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-green-400 inline-block"></span>
+            Publicado <span id="scount-publicado" class="text-[10px] px-1.5 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 font-medium ml-1">0</span>
+          </button>
+        </div>
+
+        <!-- Sub-type Tabs (Modelos, Planos PDF, Planos DWG) with counters -->
+        <div class="flex gap-4 mb-5 text-xs font-semibold border-b border-slate-100 dark:border-slate-800/60 pb-1">
+          <button id="sstab-models" class="pb-2 border-b-2 border-blue-600 text-blue-600 dark:text-blue-400 transition-all focus:outline-none flex items-center gap-1.5">
+            Modelos <span id="scount-sub-models" class="text-[10px] px-1.5 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 font-medium">0</span>
+          </button>
+          <button id="sstab-pdfs" class="pb-2 border-b-2 border-transparent text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-all focus:outline-none flex items-center gap-1.5">
+            Planos PDF <span id="scount-sub-pdfs" class="text-[10px] px-1.5 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 font-medium">0</span>
+          </button>
+          <button id="sstab-dwgs" class="pb-2 border-b-2 border-transparent text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-all focus:outline-none flex items-center gap-1.5">
+            Planos DWG <span id="scount-sub-dwgs" class="text-[10px] px-1.5 py-0.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 font-medium">0</span>
+          </button>
+        </div>
+
+        <!-- Files List Container -->
+        <div id="drive-files-container" class="overflow-x-auto min-h-[150px]">
+          <!-- Loading State -->
+          <div id="list-loading" class="flex flex-col items-center justify-center py-10">
+            <div class="w-8 h-8 border-4 border-slate-300 dark:border-slate-700 border-t-blue-600 rounded-full animate-spin"></div>
+            <p class="text-xs text-slate-500 dark:text-slate-400 mt-3">Obteniendo archivos del proyecto...</p>
+          </div>
+
+          <!-- Empty State -->
+          <div id="list-empty" class="hidden flex-col items-center justify-center py-10">
+            <span class="material-symbols-outlined text-4xl text-slate-300 mb-2">folder_open</span>
+            <p class="text-xs text-slate-500 dark:text-slate-400">No se encontraron archivos en este estado y categoría.</p>
+          </div>
+
+          <!-- Table list -->
+          <table id="files-table" class="w-full text-left border-collapse text-xs hidden">
+            <thead>
+              <tr class="border-b border-slate-200 dark:border-slate-800 text-slate-400 font-semibold uppercase text-[11px] tracking-wider">
+                <th class="py-3.5 px-4 min-w-[200px]">Nombre del Archivo</th>
+                <th class="py-3.5 px-3 text-center w-28 whitespace-nowrap">Versiones</th>
+                <th class="py-3.5 px-4 w-36 whitespace-nowrap">Especialidad</th>
+                <th class="py-3.5 px-4 w-36 whitespace-nowrap">Estado</th>
+                <th class="py-3.5 px-4 w-44 whitespace-nowrap">Fecha</th>
+                <th class="py-3.5 px-4 w-48 whitespace-nowrap">Responsable</th>
+                <th class="py-3.5 px-4 text-right whitespace-nowrap">Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="files-table-body" class="divide-y divide-slate-100 dark:divide-slate-800/50">
+              <!-- Dynamically populated files rows -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="py-6 px-8 border-t border-slate-200 dark:border-slate-800 bg-white/40 dark:bg-slate-950/20 backdrop-blur-md">
+      <div class="mx-auto w-full text-center text-slate-500 dark:text-slate-400 text-xs">
+        <p id="project-footer">© 2026 nora CDE - Todos los derechos reservados.</p>
+      </div>
+    </footer>
+
+    <!-- MODAL: Guardar Nueva Versión -->
+    <div id="modal-new-version" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-sm hidden transition-opacity duration-200">
+      <div class="w-full max-w-lg glass rounded-2xl p-6 shadow-2xl border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 transform transition-all">
+        <div class="flex items-center justify-between pb-4 mb-4 border-b border-slate-200 dark:border-slate-800">
+          <div class="flex items-center gap-2.5">
+            <span class="material-symbols-outlined text-indigo-600 dark:text-indigo-400 text-2xl">history_edu</span>
+            <div>
+              <h3 class="text-base font-bold text-slate-900 dark:text-white">Guardar Nueva Versión</h3>
+              <p class="text-xs text-slate-500 dark:text-slate-400">Versionamiento manual con respaldo automático en <code class="font-mono text-[10px] bg-slate-100 dark:bg-slate-800 px-1 py-0.5 rounded">.versiones/</code>.</p>
+            </div>
+          </div>
+          <button id="btn-close-ver-modal" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors p-1 rounded-lg">
+            <span class="material-symbols-outlined text-lg">close</span>
+          </button>
+        </div>
+
+        <div class="space-y-4">
+          <!-- File info summary card -->
+          <div class="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/60 flex items-center justify-between">
+            <div class="flex items-center gap-3 truncate max-w-[70%]">
+              <span id="ver-modal-file-icon" class="material-symbols-outlined text-2xl text-blue-500">description</span>
+              <div class="truncate">
+                <p id="ver-modal-filename" class="text-xs font-bold text-slate-800 dark:text-slate-200 truncate">archivo.ext</p>
+                <p id="ver-modal-specialty" class="text-[10px] text-slate-500 dark:text-slate-400">Especialidad: General</p>
+              </div>
+            </div>
+            <div class="text-right shrink-0">
+              <span id="ver-modal-current-state" class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold bg-amber-100 dark:bg-amber-950 text-amber-700 dark:text-amber-300">En Progreso</span>
+              <p id="ver-modal-current-ver" class="text-[10px] text-slate-400 mt-0.5 font-mono">Actual: v1.0</p>
+            </div>
+          </div>
+
+          <!-- Version identifier -->
+          <div>
+            <label for="ver-input-tag" class="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-1.5">
+              Identificador de Versión <span class="text-red-500">*</span>
+            </label>
+            <div class="relative">
+              <span class="material-symbols-outlined absolute left-3 top-2 text-slate-400 text-base">tag</span>
+              <input type="text" id="ver-input-tag" placeholder="ej. v1.1, v2.0" class="w-full pl-9 pr-3 py-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-semibold text-slate-900 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" />
+            </div>
+            <p class="text-[10px] text-slate-400 mt-1">Escribe la nueva versión o mantén la sugerida automáticamente.</p>
+          </div>
+
+          <!-- Version comments -->
+          <div>
+            <label for="ver-input-comments" class="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-1.5">
+              Comentarios y Cambios de la Versión <span class="text-red-500">*</span>
+            </label>
+            <textarea id="ver-input-comments" rows="3" placeholder="Describe los ajustes realizados en esta versión (ej: Ajuste de ejes estructurales y cotas de nivel)..." class="w-full p-3 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs text-slate-900 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 resize-none"></textarea>
+          </div>
+
+          <!-- Optional updated file upload -->
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 mb-1.5">
+              Cargar Archivo Actualizado <span class="text-[10px] font-normal text-slate-400">(Opcional)</span>
+            </label>
+            <input type="file" id="ver-input-file" class="w-full text-xs text-slate-500 dark:text-slate-400 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-slate-100 file:text-slate-700 hover:file:bg-slate-200 dark:file:bg-slate-800 dark:file:text-slate-300 cursor-pointer" />
+            <p class="text-[10px] text-slate-400 mt-1">Si seleccionas un archivo nuevo, actualizará el archivo activo y respaldará el anterior en la carpeta de versiones.</p>
+          </div>
+        </div>
+
+        <div class="mt-6 flex justify-end gap-3 pt-4 border-t border-slate-200 dark:border-slate-800">
+          <button id="btn-cancel-ver-modal" class="px-4 py-2 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-xs font-bold text-slate-700 dark:text-slate-300 transition-colors">
+            Cancelar
+          </button>
+          <button id="btn-submit-ver-modal" class="inline-flex items-center gap-1.5 px-5 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs shadow-md transition-all">
+            <span class="material-symbols-outlined text-base">save</span> Guardar Versión
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL: Historial de Versiones -->
+    <div id="modal-version-history" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/60 backdrop-blur-sm hidden transition-opacity duration-200">
+      <div class="w-full max-w-3xl glass rounded-2xl p-6 shadow-2xl border border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-900/95 max-h-[90vh] flex flex-col transform transition-all">
+        <div class="flex items-center justify-between pb-4 mb-4 border-b border-slate-200 dark:border-slate-800">
+          <div class="flex items-center gap-2.5">
+            <span class="material-symbols-outlined text-blue-600 dark:text-blue-400 text-2xl">history</span>
+            <div>
+              <h3 id="history-modal-title" class="text-base font-bold text-slate-900 dark:text-white">Historial de Versiones</h3>
+              <p id="history-modal-subtitle" class="text-xs text-slate-500 dark:text-slate-400">Consulta de versiones anteriores, descargas y restauración.</p>
+            </div>
+          </div>
+          <button id="btn-close-history-modal" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors p-1 rounded-lg">
+            <span class="material-symbols-outlined text-lg">close</span>
+          </button>
+        </div>
+
+        <!-- History Content Area -->
+        <div id="history-modal-content" class="flex-1 overflow-y-auto min-h-[240px] pr-1">
+          <!-- Loading state -->
+          <div id="history-loading" class="flex flex-col items-center justify-center py-12">
+            <div class="w-8 h-8 border-3 border-slate-300 dark:border-slate-700 border-t-blue-600 rounded-full animate-spin"></div>
+            <p class="text-xs text-slate-500 dark:text-slate-400 mt-3">Cargando historial de versiones...</p>
+          </div>
+
+          <!-- Empty state -->
+          <div id="history-empty" class="hidden flex-col items-center justify-center py-12 text-center">
+            <span class="material-symbols-outlined text-4xl text-slate-300 dark:text-slate-600 mb-2">manage_history</span>
+            <p class="text-xs font-semibold text-slate-600 dark:text-slate-300">No hay versiones previas registradas</p>
+            <p class="text-[11px] text-slate-400 max-w-sm mt-1">Este archivo se encuentra en su versión inicial (v1.0). Puedes guardar una nueva versión usando el botón "+ Versión".</p>
+          </div>
+
+          <!-- Version list container -->
+          <div id="history-list" class="space-y-3 hidden">
+            <!-- Dynamically injected version entries -->
+          </div>
+        </div>
+
+        <div class="mt-4 pt-4 border-t border-slate-200 dark:border-slate-800 flex justify-between items-center text-xs">
+          <span class="text-slate-400 text-[11px]">Las versiones anteriores se respaldan en la subcarpeta <code class="font-mono text-[10px] bg-slate-100 dark:bg-slate-800 px-1 py-0.5 rounded">.versiones/</code> en Drive.</span>
+          <button id="btn-done-history-modal" class="px-4 py-2 rounded-lg bg-slate-900 dark:bg-white text-white dark:text-slate-900 font-bold hover:opacity-90 transition-opacity">
+            Cerrar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      const DEFAULT_DRIVE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx2RAQx_8K4o22xE0Mw-ETc7K_58vIoi6-PgVi64u80inuiw144ks3cgWSdCtXqIgB02g/exec';
+
+      // =====================================================================
+      // IFC Converter Organic Component — runs @thatopen/fragments WASM
+      // =====================================================================
+      const _convFrame = document.getElementById('integrated-conv-iframe');
+
+      let _convReady = false;
+
+      async function blobFromBase64(b64, mimeType = 'application/octet-stream') {
+        const bin = atob(b64);
+        const u8 = new Uint8Array(bin.length);
+        for (let i = 0; i < bin.length; i++) u8[i] = bin.charCodeAt(i);
+        return new Blob([u8], { type: mimeType });
+      }
+
+      function findIfcFileObjByBaseName(baseName, strictFilename) {
+        const norm = v => String(v || '').replace(/\.ifc$/i, '').toLowerCase();
+        const need = norm(baseName);
+        return (selectedFiles || []).find(f => {
+          if (strictFilename && f.file && norm(f.file.name) === need) return true;
+          return f.file && norm(f.file.name) === need;
+        }) || (selectedFiles || []).find(f => {
+          const other = norm(f._uiBaseName);
+          return other === need;
+        }) || null;
+      }
+
+      function syncIfcUiFileObj(fileObj) {
+        if (!fileObj) return;
+        if (!fileObj.converted && fileObj.isConverting) {
+          fileObj.status = fileObj.status || 'Convirtiendo desde panel incrustado...';
+        } else if (fileObj.loadedInUi && !fileObj.converted && !fileObj.isConverting) {
+          fileObj.status = 'Configurar en el panel inferior → Listo para convertir';
+          if (fileObj.progress < 10) fileObj.progress = 10;
+        }
+        if (typeof renderFilesList === 'function') renderFilesList();
+      }
+
+      window.addEventListener('message', function(e) {
+        if (!e || !e.data || !e.data.type) return;
+        if (e.data.type === 'CONVERTER_READY') { _convReady = true; }
+
+        if (e.data.type === 'LOAD_IFC_OK') {
+          const fileObj = findIfcFileObjByBaseName(e.data.baseName, e.data.filename);
+          if (fileObj) {
+            fileObj.loadedInUi = true;
+            fileObj._uiBaseName = e.data.baseName;
+            fileObj.isConverting = false;
+            syncIfcUiFileObj(fileObj);
+          }
+          return;
+        }
+
+        if (e.data.type === 'LOAD_IFC_ERROR') {
+          const fileObj = findIfcFileObjByBaseName(null, e.data.filename);
+          if (fileObj && !fileObj.converted) {
+            fileObj.loadedInUi = false;
+            fileObj.isConverting = false;
+            fileObj.status = 'Error al cargar en el convertidor: ' + String(e.data.error || 'desconocido');
+            if (typeof renderFilesList === 'function') renderFilesList();
+          }
+          return;
+        }
+
+        if (e.data.type === 'CONVERT_RESULT_USER') {
+          const fileObj = findIfcFileObjByBaseName(e.data.baseName, e.data.filename);
+          if (!fileObj) return;
+          // Re-use the existing helper to attach frag + json to the queue item
+          convResultToFileObj({
+            fragBase64: e.data.fragBase64,
+            jsonBase64: e.data.jsonBase64,
+            baseName: e.data.baseName
+          }, fileObj);
+          fileObj.isConverting = false;
+          fileObj.converted = true;
+          fileObj.progress = 100;
+          fileObj.status = 'Completado en panel incrustado ✓';
+          if (typeof addLog === 'function') addLog(`[${fileObj.file.name}] Conversión completada desde el panel incrustado.`);
+          if (typeof renderFilesList === 'function') renderFilesList();
+          return;
+        }
+
+        if (e.data.type === 'CONVERT_ERROR_USER') {
+          const fileObj = findIfcFileObjByBaseName(e.data.baseName);
+          if (!fileObj || fileObj.converted) return;
+          fileObj.isConverting = false;
+          fileObj.status = 'Error en conversión: ' + String(e.data.error || 'desconocido');
+          if (typeof addLog === 'function') addLog(`[${fileObj.file.name}] Error en conversión del panel: ${e.data.error || 'desconocido'}`);
+          if (typeof renderFilesList === 'function') renderFilesList();
+        }
+      });
+
+      if (_convFrame) {
+        _convFrame.addEventListener('load', function() { _convReady = true; });
+      }
+
+      async function loadIfcInConverterUi(fileObj) {
+        if (!_convFrame) return false;
+        if (!fileObj || !fileObj.file) return false;
+        if (fileObj.loadedInUi || fileObj.converted) return true;
+        // Guard against double-sends
+        if (fileObj._loadingInUi) return false;
+        fileObj._loadingInUi = true;
+
+        try {
+          let attempts = 0;
+          while (!_convReady && attempts < 150) {
+            await new Promise(r => setTimeout(r, 200));
+            attempts++;
+          }
+          const arrayBuffer = await fileObj.file.arrayBuffer();
+          _convFrame.contentWindow.postMessage(
+            { type: 'LOAD_IFC_FILE', bytes: arrayBuffer, filename: fileObj.file.name },
+            '*'
+          );
+          fileObj.status = 'Cargando en convertidor incrustado...';
+          fileObj.progress = 5;
+          if (typeof renderFilesList === 'function') renderFilesList();
+          return true;
+        } catch (err) {
+          fileObj._loadingInUi = false;
+          if (typeof addLog === 'function') addLog(`[${fileObj.file.name}] Error al enviar al convertidor UI: ${err?.message || err}`);
+          return false;
+        }
+      }
+
+      async function convertIfcInBrowser(fileObj) {
+        let readyAttempts = 0;
+        while (!_convReady && readyAttempts < 150) {
+          await new Promise(r => setTimeout(r, 200));
+          readyAttempts++;
+        }
+        if (!_convReady) {
+          console.warn('iframe load timeout, attempting conversion anyway...');
+        }
+
+
+
+        const arrayBuffer = await fileObj.file.arrayBuffer();
+        const requestId = 'ifc_' + Date.now() + '_' + Math.random().toString(36).slice(2);
+        return new Promise(function(resolve, reject) {
+          var t = setTimeout(function() {
+            window.removeEventListener('message', h);
+            reject(new Error('La conversión IFC excedió el tiempo límite (10 min). El archivo puede ser demasiado grande.'));
+          }, 600000);
+          function h(e) {
+            if (!e.data || e.data.requestId !== requestId) return;
+            if (e.data.type === 'CONVERT_PROGRESS') {
+              if (fileObj && typeof fileObj.onProgress === 'function') {
+                fileObj.onProgress(e.data.progress);
+              }
+              return;
+            }
+            clearTimeout(t);
+            window.removeEventListener('message', h);
+            if (e.data.type === 'CONVERT_RESULT') resolve(e.data);
+            else reject(new Error(e.data.error || 'Error desconocido en la conversión IFC'));
+          }
+          window.addEventListener('message', h);
+          _convFrame.contentWindow.postMessage(
+            { type: 'CONVERT_IFC', bytes: arrayBuffer, filename: fileObj.file.name, requestId: requestId },
+            '*'
+          );
+        });
+      }
+      // =====================================================================
+      // FRAG Converter — Embedded Panel Controller (Collapsible / Auto-expand)
+      // =====================================================================
+      let _fragPanelOpen = false;
+      const fragPanelBody = document.getElementById('frag-converter-body');
+      const fragToggleLabel = document.getElementById('frag-toggle-label');
+      const fragToggleIcon = document.getElementById('frag-toggle-icon');
+      const fragConverterBadge = document.getElementById('frag-converter-badge');
+
+      window.toggleFragConverterPanel = function(forceState) {
+        const willOpen = typeof forceState === 'boolean'
+          ? forceState
+          : !_fragPanelOpen;
+        _fragPanelOpen = willOpen;
+        if (fragPanelBody) {
+          if (willOpen) fragPanelBody.classList.remove('hidden');
+          else fragPanelBody.classList.add('hidden');
+        }
+        if (fragToggleLabel) {
+          fragToggleLabel.textContent = willOpen ? 'Ocultar Panel' : 'Mostrar Panel';
+        }
+        if (fragToggleIcon) {
+          fragToggleIcon.textContent = willOpen ? 'visibility_off' : 'visibility';
+        }
+      };
+
+      function syncFragConverterPanelState() {
+        const ifcItems = (selectedFiles || []).filter(
+          f => getFileExtension(f.file?.name || '') === 'ifc'
+        );
+        const ifcCount = ifcItems.length;
+        const converting = ifcItems.some(f => f.isConverting);
+        const converted = ifcItems.filter(f => f.converted).length;
+
+        if (fragConverterBadge) {
+          if (ifcCount === 0) {
+            fragConverterBadge.textContent = 'Esperando IFC';
+            fragConverterBadge.className = 'inline-flex items-center px-2 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider bg-slate-200/70 dark:bg-slate-700/60 text-slate-600 dark:text-slate-300';
+          } else if (converting) {
+            fragConverterBadge.textContent = `Convirtiendo (${ifcCount})`;
+            fragConverterBadge.className = 'inline-flex items-center px-2 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider bg-amber-100 dark:bg-amber-900/60 text-amber-800 dark:text-amber-300 animate-pulse';
+          } else if (converted === ifcCount && ifcCount > 0) {
+            fragConverterBadge.textContent = `${converted}/${ifcCount} Listo`;
+            fragConverterBadge.className = 'inline-flex items-center px-2 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider bg-emerald-100 dark:bg-emerald-900/60 text-emerald-700 dark:text-emerald-300';
+          } else {
+            const pending = ifcCount - converted;
+            fragConverterBadge.textContent = `${pending} IFC${pending > 1 ? 's' : ''} pendiente${pending > 1 ? 's' : ''}`;
+            fragConverterBadge.className = 'inline-flex items-center px-2 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider bg-indigo-100 dark:bg-indigo-900/60 text-indigo-700 dark:text-indigo-300';
+          }
+        }
+
+        // Auto-expand when there is at least one IFC in the queue
+        if (ifcCount > 0 && !_fragPanelOpen) {
+          window.toggleFragConverterPanel(true);
+        }
+        // Auto-collapse only if user hasn't explicitly toggled and queue is empty
+        // (We keep it open so the user can still interact if they want)
+      }
+      // =====================================================================
+      const DEFAULT_PORTAL_CONFIG = {
+        portal: {
+          name: 'nora CDE',
+          shortName: 'Portal BIM',
+          footerText: '© 2026 nora CDE - Todos los derechos reservados.',
+        },
+      };
+
+      const DEFAULT_PROJECT = {
+        name: 'Proyecto',
+        slug: 'proyecto',
+        city: 'Bogotá',
+        type: 'Proyecto',
+        status: 'Activo',
+        enabled: true,
+        dataSources: {
+          driveFolderName: '',
+          driveFolderId: '',
+          driveScriptUrl: '',
+        }
+      };
+
+      // UI Selectors
+      const backBtn = document.getElementById('back-btn');
+      const themeToggle = document.getElementById('theme-toggle');
+      const authContainer = document.getElementById('auth-container');
+      const headerDate = document.getElementById('header-date');
+      const projectNow = document.getElementById('project-now');
+      const projectTitle = document.getElementById('project-title');
+      const projectSubtitle = document.getElementById('project-subtitle');
+      const projectFooter = document.getElementById('project-footer');
+      const projectSelectContainer = document.getElementById('project-select-container');
+      const projectSelect = document.getElementById('project-select');
+
+      const dropZone = document.getElementById('drop-zone');
+      const fileInput = document.getElementById('file-input');
+      const filesListContainer = document.getElementById('files-list-container');
+      const selectedFilesList = document.getElementById('selected-files-list');
+      const clearQueueBtn = document.getElementById('clear-queue-btn');
+      const uploadBtn = document.getElementById('upload-btn');
+      const logCard = document.getElementById('log-card');
+      const logContainer = document.getElementById('log-container');
+
+      const globalStatusContainer = document.getElementById('global-status-container');
+      const globalStatusText = document.getElementById('global-status-text');
+      const globalStatusPercentage = document.getElementById('global-status-percentage');
+      const globalProgressBar = document.getElementById('global-progress-bar');
+
+      const refreshListBtn = document.getElementById('refresh-list-btn');
+      const refreshIcon = document.getElementById('refresh-icon');
+      const filesSearch = document.getElementById('files-search');
+
+      const stabProgreso = document.getElementById('stab-progreso');
+      const stabCompartido = document.getElementById('stab-compartido');
+      const stabPublicado = document.getElementById('stab-publicado');
+      const scountProgreso = document.getElementById('scount-progreso');
+      const scountCompartido = document.getElementById('scount-compartido');
+      const scountPublicado = document.getElementById('scount-publicado');
+
+      const sstabModels = document.getElementById('sstab-models');
+      const sstabPdfs = document.getElementById('sstab-pdfs');
+      const sstabDwgs = document.getElementById('sstab-dwgs');
+      const scountSubModels = document.getElementById('scount-sub-models');
+      const scountSubPdfs = document.getElementById('scount-sub-pdfs');
+      const scountSubDwgs = document.getElementById('scount-sub-dwgs');
+      
+      const driveFilesContainer = document.getElementById('drive-files-container');
+      const listLoading = document.getElementById('list-loading');
+      const listEmpty = document.getElementById('list-empty');
+      const filesTable = document.getElementById('files-table');
+      const filesTableBody = document.getElementById('files-table-body');
+
+      // Version Modals Selectors
+      const modalNewVersion = document.getElementById('modal-new-version');
+      const btnCloseVerModal = document.getElementById('btn-close-ver-modal');
+      const btnCancelVerModal = document.getElementById('btn-cancel-ver-modal');
+      const btnSubmitVerModal = document.getElementById('btn-submit-ver-modal');
+      const verModalFileIcon = document.getElementById('ver-modal-file-icon');
+      const verModalFilename = document.getElementById('ver-modal-filename');
+      const verModalSpecialty = document.getElementById('ver-modal-specialty');
+      const verModalCurrentState = document.getElementById('ver-modal-current-state');
+      const verModalCurrentVer = document.getElementById('ver-modal-current-ver');
+      const verInputTag = document.getElementById('ver-input-tag');
+      const verInputComments = document.getElementById('ver-input-comments');
+      const verInputFile = document.getElementById('ver-input-file');
+
+      const modalVersionHistory = document.getElementById('modal-version-history');
+      const btnCloseHistoryModal = document.getElementById('btn-close-history-modal');
+      const btnDoneHistoryModal = document.getElementById('btn-done-history-modal');
+      const historyModalTitle = document.getElementById('history-modal-title');
+      const historyModalSubtitle = document.getElementById('history-modal-subtitle');
+      const historyLoading = document.getElementById('history-loading');
+      const historyEmpty = document.getElementById('history-empty');
+      const historyList = document.getElementById('history-list');
+
+      let selectedFiles = []; // Array of { file: File, id: number, status: string, progress: number }
+      let fileIdCounter = 0;
+      let isUploading = false;
+      let targetVersionFile = null; // Currently selected file for new version
+
+      let currentCompany = null;
+      let config = DEFAULT_PORTAL_CONFIG;
+      let projects = [];
+      let activeProject = null;
+      let currentStatusTab = 'EN_PROGRESO'; // 'EN_PROGRESO', 'COMPARTIDO', 'PUBLICADO'
+      let currentStatusSubTab = 'models';   // 'models', 'pdfs', 'dwgs'
+      let allProjectFiles = [];             // Combined & resolved list of all files with status and version
+      const collapsedModelGroups = new Set();
+      const collapsedSpecialtyGroups = new Set();
+      const STATUS_ORDER = { 'EN_PROGRESO': 0, 'COMPARTIDO': 1, 'PUBLICADO': 2 };
+      const SUBTYPE_MAP = { models: 'model', pdfs: 'pdf', dwgs: 'dwg' };
+      const MODEL_3D_EXTENSIONS = new Set([
+        'frag', 'json', 'ifc', 'landxml', 'citygml',
+        'rvt', 'rfa', 'rte', 'pln', 'pla', 'mod',
+        'imodel', 'vwx', 'ndw', 'cyp',
+        'nwc', 'nwf', 'nwd', 'smc',
+        'e57', 'pts', 'xyz', 'las', 'laz', 'rcp', 'rcs'
+      ]);
+      const MODEL_TYPE_ORDER = [
+        'ifc', 'frag', 'json', 'landxml', 'citygml',
+        'rvt', 'rfa', 'rte', 'pln', 'pla', 'mod',
+        'imodel', 'vwx', 'ndw', 'cyp',
+        'nwc', 'nwf', 'nwd', 'smc',
+        'e57', 'pts', 'xyz', 'las', 'laz', 'rcp', 'rcs'
+      ];
+      const MODEL_TYPE_LABELS = {
+        frag: 'Fragmentos (.frag)', ifc: 'IFC (.ifc)', json: 'Datos JSON (.json)',
+        landxml: 'LandXML (.landxml)', citygml: 'CityGML (.citygml)',
+        rvt: 'Revit proyectos (.rvt)', rfa: 'Revit familias (.rfa)', rte: 'Revit plantillas (.rte)',
+        pln: 'Archicad (.pln)', pla: 'Archicad archivo (.pla)', mod: 'Modelos (.mod)',
+        imodel: 'iModels (.imodel)', vwx: 'Vectorworks (.vwx)', ndw: 'Nemetschek (.ndw)',
+        cyp: 'CYPE (.cyp)', nwc: 'Navisworks cache (.nwc)', nwf: 'Navisworks federado (.nwf)',
+        nwd: 'Navisworks publicado (.nwd)', smc: 'Solibri (.smc)',
+        e57: 'Nubes de puntos E57 (.e57)', pts: 'Nubes de puntos PTS (.pts)',
+        xyz: 'Nubes de puntos XYZ (.xyz)', las: 'LiDAR LAS (.las)', laz: 'LiDAR LAZ (.laz)',
+        rcp: 'Recap proyectos (.rcp)', rcs: 'Recap escaneos (.rcs)'
+      };
+
+      const getFileExtension = (filename) => {
+        const lower = String(filename || '').toLowerCase();
+        if (lower.endsWith('.landxml')) return 'landxml';
+        if (lower.endsWith('.citygml')) return 'citygml';
+        return (lower.split('.').pop() || 'otros');
+      };
+
+      const isModel3DExtension = (ext) => MODEL_3D_EXTENSIONS.has(ext);
+      const isVisibleInProjectFilesView = (file) => getFileExtension(file?.name) !== 'json';
+
+      const resolveUploadFileType = (ext) => {
+        if (isModel3DExtension(ext)) return 'model';
+        if (ext === 'pdf') return 'pdf';
+        if (ext === 'dwg' || ext === 'dxf') return 'dwg';
+        return 'other';
+      };
+
+      const getModelFileIcon = (ext) => {
+        if (ext === 'json') return { icon: 'data_object', iconClass: 'text-emerald-500' };
+        if (ext === 'frag') return { icon: 'view_in_ar', iconClass: 'text-indigo-500' };
+        if (['e57', 'pts', 'xyz', 'las', 'laz', 'rcp', 'rcs'].includes(ext)) {
+          return { icon: 'cloud', iconClass: 'text-cyan-500' };
+        }
+        return { icon: 'view_in_ar', iconClass: 'text-blue-500' };
+      };
+
+      // Theme configuration
+      const htmlEl = document.documentElement;
+      const applyTheme = (theme) => {
+        if (theme === 'dark') {
+          htmlEl.classList.add('dark');
+          themeToggle.querySelector('.material-symbols-outlined').textContent = 'light_mode';
+        } else {
+          htmlEl.classList.remove('dark');
+          themeToggle.querySelector('.material-symbols-outlined').textContent = 'dark_mode';
+        }
+      };
+      const savedTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      applyTheme(savedTheme);
+      themeToggle.addEventListener('click', () => {
+        const newTheme = htmlEl.classList.contains('dark') ? 'light' : 'dark';
+        localStorage.setItem('theme', newTheme);
+        applyTheme(newTheme);
+      });
+
+      // Session load
+      const userAccount = JSON.parse(sessionStorage.getItem('userAccount') || localStorage.getItem('userAccount') || 'null');
+      if (userAccount) {
+        authContainer.innerHTML = `
+          <div class="flex items-center gap-3">
+            <span class="text-sm font-medium">Hola, ${userAccount.name.split(' ')[0]}</span>
+            <button id="logout-btn" class="flex items-center justify-center p-1.5 rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:bg-red-50 dark:hover:bg-red-950/30 hover:border-red-200 dark:hover:border-red-900 hover:text-red-600 dark:hover:text-red-400 transition-colors" title="Cerrar sesión">
+              <span class="material-symbols-outlined text-[16px]">logout</span>
+            </button>
+          </div>
+        `;
+        document.getElementById('logout-btn').addEventListener('click', () => {
+          if (confirm('¿Cerrar sesión?')) {
+            sessionStorage.removeItem('userAccount');
+            localStorage.removeItem('userAccount');
+            window.location.reload();
+          }
+        });
+      }
+
+      // Time updater
+      const updateNow = () => {
+        const d = new Date();
+        const hh = String(d.getHours()).padStart(2, '0');
+        const mm = String(d.getMinutes()).padStart(2, '0');
+        if (projectNow) projectNow.textContent = `${hh}:${mm}`;
+        if (headerDate) {
+          const monthNames = ["ENE", "FEB", "MAR", "ABR", "MAY", "JUN", "JUL", "AGO", "SEP", "OCT", "NOV", "DIC"];
+          headerDate.textContent = `${d.getDate()} ${monthNames[d.getMonth()]}`;
+        }
+      };
+      updateNow();
+      window.setInterval(updateNow, 15000);
+
+      // Routing parameters
+      const query = new URLSearchParams(window.location.search);
+      
+      let referrerCompanyId = '';
+      try {
+        if (document.referrer) {
+          const refUrl = new URL(document.referrer);
+          referrerCompanyId = refUrl.searchParams.get('empresa') || '';
+        }
+      } catch (e) {
+        console.warn('Error parsing referrer URL', e);
+      }
+      
+      const companyId = query.get('empresa') || referrerCompanyId || sessionStorage.getItem('empresa') || '';
+      if (companyId) {
+        sessionStorage.setItem('empresa', companyId);
+      }
+
+      const slugify = (value) => String(value ?? '')
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '') || 'proyecto';
+      
+      const requestedProject = slugify(query.get('project') || '');
+      let urlDriveFolderId = (query.get('driveFolderId') || '').trim();
+      if (urlDriveFolderId === '1u3SljQ4SaxvR4jpS2qxOviKGRoPxRelw' || urlDriveFolderId === '1u3SljQ4SaxvR4jpS2qxOviKGrOPxRelw') {
+        urlDriveFolderId = '1u3SIjQ4SaxvR4jpS2qxOviKGrOPxRelw';
+      }
+      const urlDriveFolderName = query.get('driveFolderName') || '';
+      const urlDriveScriptUrl = query.get('driveScriptUrl') || '';
+
+      backBtn.addEventListener('click', () => {
+        let path = 'project-landing.html';
+        const params = [];
+        if (companyId) params.push(`empresa=${encodeURIComponent(companyId)}`);
+        if (activeProject) params.push(`project=${encodeURIComponent(activeProject.slug)}`);
+        if (params.length) path += '?' + params.join('&');
+        window.location.href = path;
+      });
+
+      // Terminal logs helper
+      const addLog = (text) => {
+        const div = document.createElement('div');
+        div.textContent = `[${new Date().toLocaleTimeString()}] ${text}`;
+        logContainer.appendChild(div);
+        logContainer.scrollTop = logContainer.scrollHeight;
+      };
+
+      // Load portal configurations
+      const loadConfig = async () => {
+        try {
+          let configUrl = `portal-config.json`;
+          if (companyId) {
+            try {
+              const empRes = await fetch('empresas.json');
+              if (empRes.ok) {
+                const empresas = await empRes.json();
+                currentCompany = empresas.find(e => e.id === companyId);
+                if (currentCompany && currentCompany.configUrl) {
+                  configUrl = currentCompany.configUrl;
+                }
+              }
+            } catch(e) {
+              console.warn('Error loading empresas.json', e);
+            }
+          }
+          const response = await fetch(configUrl, { cache: 'no-store' });
+          if (!response.ok) throw new Error('No se pudo cargar la configuración');
+          return await response.json();
+        } catch (error) {
+          console.warn('Error fetching config, using defaults...', error);
+          const draft = localStorage.getItem('portal:pba-config-draft:v2');
+          return draft ? JSON.parse(draft) : DEFAULT_PORTAL_CONFIG;
+        }
+      };
+
+      try {
+        config = await loadConfig();
+        projects = Array.isArray(config.projects) ? config.projects : [];
+        
+        if (projects.length === 0) {
+          projects = [DEFAULT_PROJECT];
+        }
+
+        // Active project selection
+        let matchedProject = null;
+        if (requestedProject) {
+          matchedProject = projects.find(p => p.slug === requestedProject || slugify(p.name) === requestedProject);
+        }
+
+        if (matchedProject) {
+          activeProject = {
+            ...matchedProject,
+            name: urlDriveFolderName || matchedProject.name,
+            slug: matchedProject.slug || slugify(matchedProject.name),
+            city: matchedProject.city || 'Bogotá',
+            dataSources: {
+              ...matchedProject.dataSources,
+              driveFolderId: urlDriveFolderId || matchedProject.dataSources?.driveFolderId || '',
+              driveFolderName: urlDriveFolderName || matchedProject.dataSources?.driveFolderName || matchedProject.name,
+              driveScriptUrl: urlDriveScriptUrl || matchedProject.dataSources?.driveScriptUrl || DEFAULT_DRIVE_SCRIPT_URL
+            }
+          };
+        } else {
+          if (urlDriveFolderId || urlDriveFolderName) {
+            activeProject = {
+              name: urlDriveFolderName || 'Proyecto',
+              slug: requestedProject || 'proyecto',
+              city: 'Bogotá',
+              dataSources: {
+                driveFolderId: urlDriveFolderId,
+                driveFolderName: urlDriveFolderName,
+                driveScriptUrl: urlDriveScriptUrl || DEFAULT_DRIVE_SCRIPT_URL
+              }
+            };
+          } else {
+            const firstProj = projects[0] || DEFAULT_PROJECT;
+            activeProject = {
+              ...firstProj,
+              name: firstProj.name,
+              slug: firstProj.slug || slugify(firstProj.name),
+              city: firstProj.city || 'Bogotá',
+              dataSources: {
+                ...firstProj.dataSources,
+                driveFolderId: firstProj.dataSources?.driveFolderId || '',
+                driveFolderName: firstProj.dataSources?.driveFolderName || '',
+                driveScriptUrl: firstProj.dataSources?.driveScriptUrl || DEFAULT_DRIVE_SCRIPT_URL
+              }
+            };
+          }
+        }
+
+        projectSelect.innerHTML = projects.map(p => `<option value="${p.slug || slugify(p.name)}" ${p.slug === activeProject.slug ? 'selected' : ''}>${p.name}</option>`).join('');
+        
+        projectSelect.addEventListener('change', async (e) => {
+          const selectedSlug = e.target.value;
+          const configProject = projects.find(p => p.slug === selectedSlug || slugify(p.name) === selectedSlug);
+          if (configProject) {
+            activeProject = {
+              ...configProject,
+              name: configProject.name,
+              slug: configProject.slug || slugify(configProject.name),
+              city: configProject.city || 'Bogotá',
+              dataSources: {
+                ...configProject.dataSources,
+                driveFolderId: configProject.dataSources?.driveFolderId || '',
+                driveFolderName: configProject.dataSources?.driveFolderName || configProject.name,
+                driveScriptUrl: configProject.dataSources?.driveScriptUrl || DEFAULT_DRIVE_SCRIPT_URL
+              }
+            };
+            updateProjectUI();
+            await hydrateProjectTeams();
+            loadProjectFiles();
+          }
+        });
+
+        // Helper functions for ISO 19650 Team Silos & Permissions
+        function normalizeTeamName(name) {
+          return String(name || '')
+            .normalize('NFD')
+            .replace(/[\u0300-\u036f]/g, '')
+            .toUpperCase()
+            .trim();
+        }
+
+        function parseStoredDeliveryTeams(value) {
+          if (Array.isArray(value)) {
+            return value.map(team => String(team || '').trim()).filter(Boolean);
+          }
+          const raw = String(value || '').trim();
+          if (!raw) return [];
+          if (raw.startsWith('[')) {
+            try {
+              const parsed = JSON.parse(raw);
+              if (Array.isArray(parsed)) {
+                return parsed.map(team => String(team || '').trim()).filter(Boolean);
+              }
+            } catch (err) {
+              console.warn('No se pudo interpretar deliveryTeams:', err);
+            }
+          }
+          return raw.split(/[|,]/).map(team => String(team || '').trim()).filter(Boolean);
+        }
+
+        function uniqueTeamNames(teams) {
+          const seen = new Set();
+          return (teams || []).reduce((acc, team) => {
+            const clean = String(team || '').trim();
+            const normalized = normalizeTeamName(clean);
+            if (!clean || seen.has(normalized)) return acc;
+            seen.add(normalized);
+            acc.push(clean.toUpperCase());
+            return acc;
+          }, []);
+        }
+
+        function ensureProjectTeamStructure(project) {
+          if (!project) return;
+          if (!Array.isArray(project.members)) project.members = [];
+          if (!project.iso19650) project.iso19650 = {};
+          if (!Array.isArray(project.iso19650.deliveryTeams)) project.iso19650.deliveryTeams = [];
+          if (!Array.isArray(project.equiposDeTarea)) project.equiposDeTarea = [];
+        }
+
+        async function hydrateProjectTeams() {
+          if (!activeProject) return;
+          ensureProjectTeamStructure(activeProject);
+
+          const ds = activeProject.dataSources || {};
+          const scriptUrl = ds.driveScriptUrl || DEFAULT_DRIVE_SCRIPT_URL;
+          const projectSlug = activeProject.slug || slugify(activeProject.name);
+
+          try {
+            const teamsRes = await fetch(`${scriptUrl}?action=getTeams&empresa=${encodeURIComponent(companyId || '')}&proyecto=${encodeURIComponent(projectSlug)}&t=${Date.now()}`);
+            if (!teamsRes.ok) return;
+
+            const remoteTeams = await teamsRes.json();
+            if (!Array.isArray(remoteTeams)) return;
+
+            remoteTeams.forEach(rt => {
+              const teamName = String(rt.name || '').trim();
+              if (!teamName) return;
+
+              const remoteMembers = Array.isArray(rt.members)
+                ? rt.members.map(member => String(member || '').toLowerCase().trim()).filter(Boolean)
+                : [];
+              const normalized = normalizeTeamName(teamName);
+
+              let deliveryTeam = activeProject.iso19650.deliveryTeams.find(dt => normalizeTeamName(dt.name) === normalized);
+              if (!deliveryTeam) {
+                deliveryTeam = {
+                  id: `dt-${projectSlug}-${normalized.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`,
+                  name: teamName,
+                  members: []
+                };
+                activeProject.iso19650.deliveryTeams.push(deliveryTeam);
+              }
+
+              const mergedMembers = new Set(
+                (Array.isArray(deliveryTeam.members) ? deliveryTeam.members : [])
+                  .map(member => String(member || '').toLowerCase().trim())
+                  .filter(Boolean)
+              );
+              remoteMembers.forEach(member => {
+                mergedMembers.add(member);
+                if (!activeProject.members.includes(member)) activeProject.members.push(member);
+              });
+              deliveryTeam.members = Array.from(mergedMembers);
+            });
+
+            activeProject.equiposDeTarea = (activeProject.iso19650.deliveryTeams || []).map(dt => ({
+              name: dt.name,
+              members: [...(dt.members || [])]
+            }));
+          } catch (err) {
+            console.warn('No se pudieron hidratar los equipos del proyecto:', err);
+          }
+        }
+
+        function getUserDeliveryTeams(email) {
+          if (!email || !activeProject) return [];
+          const cleanEmail = email.toLowerCase().trim();
+          ensureProjectTeamStructure(activeProject);
+          const teams = [];
+
+          // Check deliveryTeams
+          const deliveryTeams = activeProject.iso19650?.deliveryTeams || [];
+          deliveryTeams.forEach(dt => {
+            const isMember = Array.isArray(dt.members) && dt.members.map(m => m.toLowerCase().trim()).includes(cleanEmail);
+            const isLead = dt.leadEmail && dt.leadEmail.toLowerCase().trim() === cleanEmail;
+            if (isMember || isLead) {
+              teams.push(dt.name);
+            }
+          });
+
+          // Check equiposDeTarea
+          const equipos = activeProject.equiposDeTarea || [];
+          equipos.forEach(eq => {
+            const isMember = Array.isArray(eq.members) && eq.members.map(m => m.toLowerCase().trim()).includes(cleanEmail);
+            if (isMember) {
+              teams.push(eq.name);
+            }
+          });
+
+          return uniqueTeamNames(teams);
+        }
+
+        function resolveCurrentUserDeliveryTeams() {
+          const currentUser = JSON.parse(sessionStorage.getItem('userAccount') || localStorage.getItem('userAccount') || 'null');
+          if (!currentUser) return [];
+          const email = (currentUser.username || currentUser.email || currentUser.userAccount || '').toLowerCase().trim();
+          return getUserDeliveryTeams(email);
+        }
+
+        function getFileDeliveryTeams(file) {
+          if (!file || !activeProject) return [];
+          ensureProjectTeamStructure(activeProject);
+          const teams = new Set();
+
+          parseStoredDeliveryTeams(file.deliveryTeams).forEach(team => {
+            const clean = String(team || '').trim();
+            if (clean) teams.add(clean.toUpperCase());
+          });
+
+          if (teams.size > 0) {
+            return Array.from(teams);
+          }
+
+          // 1. Try folder specialty first (Primary source of truth)
+          const specialty = cleanSpecialty(file.folder).toUpperCase().trim();
+          if (specialty && specialty !== 'GENERAL') {
+            const normSpecialty = normalizeTeamName(specialty);
+
+            const deliveryTeams = activeProject.iso19650?.deliveryTeams || [];
+            deliveryTeams.forEach(dt => {
+              if (normalizeTeamName(dt.name) === normSpecialty) {
+                teams.add(dt.name.toUpperCase().trim());
+              }
+            });
+
+            const equipos = activeProject.equiposDeTarea || [];
+            equipos.forEach(eq => {
+              if (normalizeTeamName(eq.name) === normSpecialty) {
+                teams.add(eq.name.toUpperCase().trim());
+              }
+            });
+          }
+
+          // 2. Fallback / Secondary source: check by uploader/changedByEmail
+          if (teams.size === 0) {
+            const uEmail = (file.changedByEmail || '').toLowerCase().trim();
+            if (uEmail && uEmail !== 'unassigned@nora.cde') {
+              const deliveryTeams = activeProject.iso19650?.deliveryTeams || [];
+              deliveryTeams.forEach(dt => {
+                const isMember = Array.isArray(dt.members) && dt.members.map(m => m.toLowerCase().trim()).includes(uEmail);
+                const isLead = dt.leadEmail && dt.leadEmail.toLowerCase().trim() === uEmail;
+                if (isMember || isLead) {
+                  teams.add(dt.name.toUpperCase().trim());
+                }
+              });
+
+              const equipos = activeProject.equiposDeTarea || [];
+              equipos.forEach(eq => {
+                const isMember = Array.isArray(eq.members) && eq.members.map(m => m.toLowerCase().trim()).includes(uEmail);
+                if (isMember) {
+                  teams.add(eq.name.toUpperCase().trim());
+                }
+              });
+            }
+          }
+
+          return uniqueTeamNames(Array.from(teams));
+        }
+
+        function isUserAuthorizedForFile(file, action = 'view') {
+          // 1. Get current user's email
+          const currentUser = JSON.parse(sessionStorage.getItem('userAccount') || localStorage.getItem('userAccount') || 'null');
+          if (!currentUser) return false;
+          const email = (currentUser.username || currentUser.email || currentUser.userAccount || '').toLowerCase().trim();
+
+          // Rule: If user is in a receiver team, they can ONLY access files with status === 'PUBLICADO'
+          const receiverTeams = activeProject?.iso19650?.receiverTeams || [];
+          const isInReceiverTeam = receiverTeams.some(rt => {
+            const isMember = Array.isArray(rt.members) && rt.members.map(m => m.toLowerCase().trim()).includes(email);
+            const isLead = rt.leadEmail && rt.leadEmail.toLowerCase().trim() === email;
+            return isMember || isLead;
+          });
+
+          if (isInReceiverTeam && file.status !== 'PUBLICADO') {
+            return false;
+          }
+
+          // 2. Superadmins are always authorized
+          const superAdmins = ['imagina3ddesign@gmail.com', 'mcmartinezg@unal.edu.co'];
+          const isSuperAdmin = superAdmins.includes(email) || currentUser.role === 'SUPER_ADMIN' || currentUser.role === 'SUPER_ADMINISTRADOR';
+
+          if (isSuperAdmin) return true;
+
+          // Restrict WIP (EN_PROGRESO) files strictly to specialty team members and the uploader
+          if (file.status === 'EN_PROGRESO') {
+            // El uploader siempre puede ver/gestionar su propio archivo en progreso
+            const fileUploader = (file.changedByEmail || '').toLowerCase().trim();
+            if (fileUploader && fileUploader === email) return true;
+
+            const fileTeams = getFileDeliveryTeams(file);
+            const userTeams = getUserDeliveryTeams(email);
+
+            const normalizeName = str => String(str || '').normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase().trim();
+            const normFileTeams = fileTeams.map(normalizeName);
+            const normUserTeams = userTeams.map(normalizeName);
+
+            if (normFileTeams.length === 0) return false;
+
+            return normFileTeams.some(team => normUserTeams.includes(team));
+          }
+
+          // For shared/published files, check company and project admin permissions
+          const companyAdmins = Array.isArray(currentCompany?.admins) ? currentCompany.admins.map(a => a.toLowerCase().trim()) : [];
+          const memberMatch = Array.isArray(currentCompany?.members) ? currentCompany.members.find(m => m.email && m.email.toLowerCase().trim() === email) : null;
+          const isMemberAdmin = memberMatch && (memberMatch.role === 'ADMINISTRADOR_EMPRESA' || memberMatch.role === 'ADMINISTRADOR');
+
+          const isCompanyAdmin = isSuperAdmin || companyAdmins.includes(email) || isMemberAdmin || (currentUser.adminEmpresaId && currentUser.adminEmpresaId === companyId && (currentUser.role === 'ADMINISTRADOR_EMPRESA' || currentUser.role === 'SUPER_ADMINISTRADOR' || currentUser.role === 'SUPER_ADMIN'));
+
+          const projectAdmins = Array.isArray(activeProject?.iso19650?.projectAdmins)
+            ? activeProject.iso19650.projectAdmins.map(a => a.toLowerCase().trim())
+            : [];
+          const isProjectAdmin = isCompanyAdmin || projectAdmins.includes(email);
+
+          if (isProjectAdmin) return true;
+
+          // El uploader siempre puede ver/gestionar su propio archivo
+          const fileUploader = (file.changedByEmail || '').toLowerCase().trim();
+          if (fileUploader && fileUploader === email) return true;
+
+          // For view action of shared/published files, any project member is authorized
+          if (action === 'view') {
+            const isMember = (activeProject?.members || []).map(m => m.toLowerCase().trim()).includes(email);
+            if (isMember) return true;
+            
+            // Fallback: check if the user is in any delivery team
+            const userTeams = getUserDeliveryTeams(email);
+            if (userTeams.length > 0) return true;
+
+            if (isInReceiverTeam) return true;
+          }
+
+          // For edit/manage action of shared/published files, check delivery team ownership
+          const fileTeams = getFileDeliveryTeams(file);
+          const userTeams = getUserDeliveryTeams(email);
+
+          const normalizeName = str => String(str || '').normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase().trim();
+          const normFileTeams = fileTeams.map(normalizeName);
+          const normUserTeams = userTeams.map(normalizeName);
+
+          if (normFileTeams.length === 0) return false;
+
+          return normFileTeams.some(team => normUserTeams.includes(team));
+        }
+
+        if (projects.length > 1) {
+          projectSelectContainer.classList.remove('hidden');
+        }
+
+        updateProjectUI();
+        await hydrateProjectTeams();
+        loadProjectFiles();
+
+      } catch (err) {
+        console.error(err);
+        projectSubtitle.textContent = 'Error al cargar la configuración del proyecto.';
+      }
+
+      function updateProjectUI() {
+        if (!activeProject) return;
+        projectTitle.textContent = `Administrar ${activeProject.name}`;
+        projectSubtitle.textContent = `${activeProject.city || 'Bogotá'} | CDE NORA`;
+        projectFooter.textContent = config.portal?.footerText || DEFAULT_PORTAL_CONFIG.portal.footerText;
+        addLog(`Proyecto activo cambiado a: ${activeProject.name}`);
+      }
+
+      // Drag and drop event handlers
+      ['dragenter', 'dragover'].forEach(eventName => {
+        dropZone.addEventListener(eventName, (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          dropZone.classList.add('drag-over');
+        }, false);
+      });
+
+      ['dragleave', 'drop'].forEach(eventName => {
+        dropZone.addEventListener(eventName, (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          dropZone.classList.remove('drag-over');
+        }, false);
+      });
+
+      dropZone.addEventListener('drop', (e) => {
+        const dt = e.dataTransfer;
+        const files = dt.files;
+        if (files.length) {
+          handleFilesSelection(files);
+        }
+      });
+
+      dropZone.addEventListener('click', () => {
+        if (isUploading) return;
+        fileInput.click();
+      });
+
+      fileInput.addEventListener('change', (e) => {
+        if (e.target.files.length) {
+          handleFilesSelection(e.target.files);
+        }
+      });
+
+      clearQueueBtn.addEventListener('click', () => {
+        if (isUploading) return;
+        selectedFiles = [];
+        renderFilesList();
+        addLog('Cola de carga limpia.');
+      });
+
+      function handleFilesSelection(filesList) {
+        if (isUploading) return;
+        
+        const allowed = ['frag', 'json', 'ifc', 'bcf', 'bcfzip', 'rvt', 'rfa', 'rte', 'pln', 'pla', 'mod', 'nwc', 'nwf', 'nwd', 'smc', 'dgn', 'imodel', 'vwx', 'ndw', 'cyp', 'dwg', 'dxf', 'pdf', 'e57', 'pts', 'xyz', 'las', 'laz', 'rcp', 'rcs', 'landxml', 'citygml', 'xml', 'cobie', 'xlsx', 'bc3'];
+        let addedCount = 0;
+
+        for (let i = 0; i < filesList.length; i++) {
+          const file = filesList[i];
+          const ext = file.name.split('.').pop().toLowerCase();
+          
+          if (!allowed.includes(ext)) {
+            alert(`El archivo "${file.name}" no tiene un formato válido. Formatos admitidos: IFC, BCF, RVT, RFA, NWC, NWD, DWG, DXF, PDF, PLN, DGN, XLSX, E57, LAS y más.`);
+            continue;
+          }
+
+          const exists = selectedFiles.some(f => f.file.name === file.name && f.file.size === file.size);
+          if (exists) continue;
+
+          selectedFiles.push({
+            id: fileIdCounter++,
+            file: file,
+            status: 'Listo',
+            progress: 0,
+            errorMsg: ''
+          });
+          addedCount++;
+        }
+
+        if (addedCount > 0) {
+          renderFilesList();
+          addLog(`Se agregaron ${addedCount} archivos a la cola.`);
+        }
+      }
+
+      function renderFilesList() {
+
+        // Sync the embedded converter panel with the current queue state
+        if (typeof syncFragConverterPanelState === 'function') syncFragConverterPanelState();
+
+        if (selectedFiles.length === 0) {
+          filesListContainer.classList.add('hidden');
+          clearQueueBtn.classList.add('hidden');
+          uploadBtn.disabled = true;
+          uploadBtn.textContent = 'Iniciar Subidas';
+          return;
+        }
+
+        filesListContainer.classList.remove('hidden');
+        if (!isUploading) {
+          clearQueueBtn.classList.remove('hidden');
+          uploadBtn.disabled = false;
+        }
+
+        // Auto-load IFCs in the embedded converter UI (user configures then converts)
+        selectedFiles.forEach(fileObj => {
+          if (getFileExtension(fileObj.file?.name || '') === 'ifc' && !fileObj.converted && !fileObj.isConverting) {
+            if (!fileObj.loadedInUi && !fileObj._loadingInUi) {
+              setTimeout(() => {
+                if (typeof loadIfcInConverterUi === 'function') {
+                  loadIfcInConverterUi(fileObj);
+                }
+                // Auto-scroll & open the converter panel for visibility
+                if (typeof window.toggleFragConverterPanel === 'function') {
+                  window.toggleFragConverterPanel(true);
+                  setTimeout(() => {
+                    const panel = document.getElementById('frag-converter-panel');
+                    if (panel && typeof panel.scrollIntoView === 'function') {
+                      panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                  }, 200);
+                }
+              }, 400);
+            }
+          }
+        });
+
+        selectedFilesList.innerHTML = selectedFiles.map(fileObj => {
+          const ext = fileObj.file.name.split('.').pop().toLowerCase();
+          let icon = 'description';
+          let iconClass = 'text-blue-500';
+          if (ext === 'pdf') {
+            icon = 'picture_as_pdf';
+            iconClass = 'text-red-500';
+          } else if (ext === 'dwg' || ext === 'dxf') {
+            icon = 'architecture';
+            iconClass = 'text-amber-500';
+          } else if (ext === 'frag') {
+            icon = 'view_in_ar';
+            iconClass = 'text-indigo-500';
+          } else if (ext === 'json') {
+            icon = 'data_object';
+            iconClass = 'text-emerald-500';
+          } else {
+            icon = 'view_in_ar';
+            iconClass = 'text-blue-500';
+          }
+
+          let statusClass = 'text-slate-500 dark:text-slate-400';
+          if (fileObj.status === 'Subiendo...' || fileObj.status === 'Convirtiendo IFC...') {
+            statusClass = 'text-blue-600 font-semibold animate-pulse';
+          } else if (fileObj.status === 'Completado') {
+            statusClass = 'text-green-600 font-bold';
+          } else if (fileObj.status.startsWith('Error')) {
+            statusClass = 'text-red-600 font-bold';
+          }
+
+          const isRemoveDisabled = isUploading ? 'disabled opacity-30 cursor-not-allowed' : '';
+          const isIfcFile = getFileExtension(fileObj.file.name) === 'ifc';
+
+          return `
+            <div class="flex flex-col p-3 rounded-lg border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 shadow-sm" data-id="${fileObj.id}">
+              <div class="flex items-center justify-between mb-2">
+                <div class="flex items-center gap-3 truncate max-w-[85%]">
+                  <span class="material-symbols-outlined text-2xl ${iconClass}">${icon}</span>
+                  <div class="truncate">
+                    <p class="text-sm font-semibold text-slate-800 dark:text-slate-200 truncate" title="${fileObj.file.name}">${fileObj.file.name}</p>
+                    <p class="text-[10px] text-slate-500 dark:text-slate-400">${(fileObj.file.size / (1024 * 1024)).toFixed(2)} MB</p>
+                  </div>
+                </div>
+                <button onclick="window.removeQueueItem(${fileObj.id})" class="text-slate-400 hover:text-red-500 transition-colors ${isRemoveDisabled}">
+                  <span class="material-symbols-outlined text-lg">close</span>
+                </button>
+              </div>
+
+              ${isIfcFile ? `
+                <div class="mb-2.5 flex items-center justify-between gap-2 bg-indigo-50/80 dark:bg-indigo-950/50 p-2 rounded-lg border border-indigo-100 dark:border-indigo-900/60">
+                  <div class="flex items-center gap-2">
+                    <span class="material-symbols-outlined text-indigo-600 dark:text-indigo-400 text-sm">view_in_ar</span>
+                    <span class="text-[11px] font-semibold text-indigo-900 dark:text-indigo-200">Conversión a FRAG + JSON</span>
+                  </div>
+                  ${fileObj.converted ? `
+                    <span class="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-700 dark:text-emerald-400 bg-emerald-100 dark:bg-emerald-950/80 px-2.5 py-1 rounded-md shadow-xs">
+                      <span class="material-symbols-outlined text-sm">check_circle</span>
+                      ✓ Listo (.frag + .json)
+                    </span>
+                  ` : fileObj.isConverting ? `
+                    <span class="inline-flex items-center gap-1.5 text-[11px] font-bold text-indigo-700 dark:text-indigo-300 bg-indigo-100 dark:bg-indigo-900/80 px-2.5 py-1 rounded-md shadow-xs">
+                      <span class="material-symbols-outlined text-sm animate-spin">sync</span>
+                      Convirtiendo... ${fileObj.progress || 10}%
+                    </span>
+                  ` : fileObj.loadedInUi ? `
+                    <button onclick="(function(){ if (window.toggleFragConverterPanel) { window.toggleFragConverterPanel(true); setTimeout(()=>{ var p = document.getElementById('frag-converter-panel'); if (p && p.scrollIntoView) p.scrollIntoView({behavior:'smooth',block:'start'}); }, 150); } })()" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md border border-indigo-300 dark:border-indigo-800 bg-white dark:bg-indigo-950/40 hover:bg-indigo-100 dark:hover:bg-indigo-900/60 text-indigo-700 dark:text-indigo-300 font-bold text-[11px] shadow-sm transition-all cursor-pointer">
+                      <span class="material-symbols-outlined text-sm">tune</span>
+                      CONFIGURAR Y CONVERTIR ↓
+                    </button>
+                  ` : `
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-indigo-100 dark:bg-indigo-900/80 text-indigo-700 dark:text-indigo-300 font-bold text-[11px] shadow-sm">
+                      <span class="material-symbols-outlined text-sm">progress_activity</span>
+                      CARGANDO EN PANEL...
+                    </span>
+                  `}
+                </div>
+              ` : ''}
+
+              <!-- File level progress bar -->
+              <div class="w-full bg-slate-200 dark:bg-slate-800 h-1.5 rounded-full overflow-hidden mb-1">
+                <div class="file-progress bg-blue-600 h-full w-[${fileObj.progress}%] transition-all duration-300"></div>
+              </div>
+
+              <!-- Status label -->
+              <div class="flex justify-between items-center text-[10px]">
+                <span class="file-status ${statusClass}">${fileObj.status}</span>
+                <span class="file-percentage text-blue-600 font-medium">${fileObj.progress}%</span>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      window.manualConvertIfc = async (id) => {
+        const fileObj = selectedFiles.find(f => f.id === id);
+        if (!fileObj || fileObj.isConverting || fileObj.converted) return;
+
+        // Ensure the embedded converter panel is visible so the user can watch the process
+        if (typeof window.toggleFragConverterPanel === 'function') {
+          window.toggleFragConverterPanel(true);
+        }
+
+        fileObj.isConverting = true;
+        fileObj.status = 'Convirtiendo a FRAG...';
+        fileObj.progress = 10;
+        renderFilesList();
+        addLog(`[${fileObj.file.name}] Iniciando conversión manual a FRAG...`);
+
+        fileObj.onProgress = (pct) => {
+          fileObj.progress = pct;
+          renderFilesList();
+        };
+
+        try {
+          const res = await convertIfcInBrowser(fileObj);
+          fileObj.convertedData = res;
+          fileObj.converted = true;
+          fileObj.isConverting = false;
+          fileObj.status = '✓ Convertido a FRAG (.frag + .json)';
+          fileObj.progress = 100;
+          renderFilesList();
+          addLog(`[${fileObj.file.name}] ¡Conversión a FRAG completada con éxito!`);
+        } catch (err) {
+          fileObj.isConverting = false;
+          fileObj.status = 'Error en conversión';
+          renderFilesList();
+          addLog(`[${fileObj.file.name}] Error en conversión: ${err.message}`, true);
+        }
+      };
+
+      window.removeQueueItem = (id) => {
+        if (isUploading) return;
+        selectedFiles = selectedFiles.filter(f => f.id !== id);
+        renderFilesList();
+        addLog(`Archivo removido de la cola.`);
+      };
+
+      const fileToBase64 = (file) => new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsArrayBuffer(file);
+        reader.onload = () => {
+          try {
+            const bytes = new Uint8Array(reader.result);
+            let binary = '';
+            const chunkSize = 8192;
+            for (let i = 0; i < bytes.length; i += chunkSize) {
+              const chunk = bytes.subarray(i, Math.min(i + chunkSize, bytes.length));
+              binary += String.fromCharCode.apply(null, chunk);
+            }
+            resolve(btoa(binary));
+          } catch (err) {
+            reject(err);
+          }
+        };
+        reader.onerror = error => reject(error);
+      });
+
+      function base64ToBlob(base64, contentType = '') {
+        const binStr = atob(base64);
+        const len = binStr.length;
+        const arr = new Uint8Array(len);
+        for (let i = 0; i < len; i++) {
+          arr[i] = binStr.charCodeAt(i);
+        }
+        return new Blob([arr], { type: contentType });
+      }
+
+      async function uploadToDriveResumable(fileOrBlob, filename, contentType, fileObj, progressCallback) {
+        const ds = activeProject.dataSources || {};
+        const scriptUrl = ds.driveScriptUrl || DEFAULT_DRIVE_SCRIPT_URL;
+        const driveFolderName = ds.driveFolderName || activeProject.name;
+        const ext = getFileExtension(filename);
+        const fileType = resolveUploadFileType(ext);
+
+        const initPayload = {
+          action: 'initResumableUpload',
+          folderId: ds.driveFolderId || '',
+          driveFolderName: driveFolderName,
+          project: activeProject.slug || slugify(activeProject.name),
+          filename: filename,
+          contentType: contentType,
+          totalBytes: fileOrBlob.size
+        };
+
+        const initRes = await fetch(scriptUrl, {
+          method: 'POST',
+          mode: 'cors',
+          headers: {
+            'Content-Type': 'text/plain;charset=utf-8'
+          },
+          body: JSON.stringify(initPayload)
+        });
+
+        if (!initRes.ok) {
+          throw new Error(`Error iniciando carga resumida: ${initRes.statusText}`);
+        }
+
+        const initData = await initRes.json();
+        if (initData.status === 'error') {
+          throw new Error(`Google Script Error (init): ${initData.message}`);
+        }
+
+        const sessionUrl = initData.sessionUrl;
+        const chunkSize = 2 * 1024 * 1024; // 2MB chunk size
+        let offset = 0;
+        let fileId = '';
+
+        while (offset < fileOrBlob.size) {
+          const chunk = fileOrBlob.slice(offset, offset + chunkSize);
+          const chunkBase64 = await new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => {
+              const bytes = new Uint8Array(reader.result);
+              let binary = '';
+              const subChunkSize = 8192;
+              for (let i = 0; i < bytes.length; i += subChunkSize) {
+                const subChunk = bytes.subarray(i, Math.min(i + subChunkSize, bytes.length));
+                binary += String.fromCharCode.apply(null, subChunk);
+              }
+              resolve(btoa(binary));
+            };
+            reader.onerror = reject;
+            reader.readAsArrayBuffer(chunk);
+          });
+
+          const chunkPayload = {
+            action: 'uploadResumableChunk',
+            sessionUrl: sessionUrl,
+            content: chunkBase64,
+            start: offset,
+            totalBytes: fileOrBlob.size,
+            contentType: contentType,
+            filename: filename,
+            project: activeProject.slug || slugify(activeProject.name),
+            fileType: fileType,
+            jsonId: (fileObj && fileObj.jsonId) || '',
+            changedBy: userAccount ? (userAccount.name || '') : '',
+            changedByEmail: userAccount ? (userAccount.email || userAccount.username || '') : '',
+            deliveryTeams: resolveCurrentUserDeliveryTeams(),
+            folderId: ds.driveFolderId || '',
+            driveFolderName: driveFolderName
+          };
+
+          const chunkRes = await fetch(scriptUrl, {
+            method: 'POST',
+            mode: 'cors',
+            headers: {
+              'Content-Type': 'text/plain;charset=utf-8'
+            },
+            body: JSON.stringify(chunkPayload)
+          });
+
+          if (!chunkRes.ok) {
+            throw new Error(`Error cargando fragmento: ${chunkRes.statusText}`);
+          }
+
+          const chunkData = await chunkRes.json();
+          if (chunkData.status === 'error') {
+            throw new Error(`Google Script Error (chunk): ${chunkData.message}`);
+          }
+
+          offset = chunkData.nextOffset;
+          fileId = chunkData.fileId;
+
+          if (progressCallback) {
+            const pct = Math.round((offset / fileOrBlob.size) * 100);
+            progressCallback(pct);
+          }
+
+          if (chunkData.complete) {
+            break;
+          }
+        }
+
+        return { status: 'success', fileId: fileId, name: filename };
+      }
+
+      async function uploadToDrive(filename, base64Content, contentType, fileObj) {
+        const ds = activeProject.dataSources || {};
+        const scriptUrl = ds.driveScriptUrl || DEFAULT_DRIVE_SCRIPT_URL;
+        const driveFolderName = ds.driveFolderName || activeProject.name;
+        const ext = getFileExtension(filename);
+        const fileType = resolveUploadFileType(ext);
+
+        const payload = {
+          action: 'uploadFile',
+          folderId: ds.driveFolderId || '',
+          driveFolderName: driveFolderName,
+          project: activeProject.slug || slugify(activeProject.name),
+          filename: filename,
+          contentType: contentType,
+          content: base64Content,
+          fileType: fileType,
+          changedBy: userAccount ? (userAccount.name || '') : '',
+          changedByEmail: userAccount ? (userAccount.email || userAccount.username || '') : '',
+          deliveryTeams: resolveCurrentUserDeliveryTeams()
+        };
+
+        const res = await fetch(scriptUrl, {
+          method: 'POST',
+          mode: 'cors',
+          headers: {
+            'Content-Type': 'text/plain;charset=utf-8'
+          },
+          body: JSON.stringify(payload)
+        });
+
+        if (!res.ok) {
+          throw new Error(`Error en el servidor de Google Apps Script: ${res.statusText}`);
+        }
+
+        const data = await res.json();
+        if (data.status === 'error') {
+          throw new Error(`Google Script Error: ${data.message}`);
+        }
+
+        return data;
+      }
+
+      function updateFileUI(fileObj, progress, status) {
+        fileObj.progress = progress;
+        fileObj.status = status;
+        
+        const card = document.querySelector(`[data-id="${fileObj.id}"]`);
+        if (card) {
+          const bar = card.querySelector('.file-progress');
+          const pct = card.querySelector('.file-percentage');
+          const lbl = card.querySelector('.file-status');
+
+          bar.style.width = `${progress}%`;
+          pct.textContent = `${progress}%`;
+          lbl.textContent = status;
+
+          lbl.className = 'file-status text-[10px]';
+          if (status === 'Subiendo...' || status === 'Convirtiendo IFC...') {
+            lbl.classList.add('text-blue-600', 'font-semibold', 'animate-pulse');
+          } else if (status === 'Completado') {
+            lbl.classList.add('text-green-600', 'font-bold');
+          } else if (status.startsWith('Error')) {
+            lbl.classList.add('text-red-600', 'font-bold');
+          } else {
+            lbl.classList.add('text-slate-500', 'dark:text-slate-400');
+          }
+        }
+      }
+
+      uploadBtn.addEventListener('click', async () => {
+        if (selectedFiles.length === 0 || !activeProject || isUploading) return;
+
+        isUploading = true;
+        uploadBtn.disabled = true;
+        clearQueueBtn.classList.add('hidden');
+        logCard.classList.remove('hidden');
+        globalStatusContainer.classList.remove('hidden');
+
+        renderFilesList();
+
+        const totalFiles = selectedFiles.length;
+        addLog(`Iniciando la subida en cola de ${totalFiles} archivos...`);
+
+        for (let i = 0; i < totalFiles; i++) {
+          const fileObj = selectedFiles[i];
+          if (fileObj.status === 'Completado') continue;
+
+          const globalProgressStart = Math.round((i / totalFiles) * 100);
+          globalStatusText.textContent = `Procesando archivo ${i + 1} de ${totalFiles}: ${fileObj.file.name}`;
+          globalStatusPercentage.textContent = `${globalProgressStart}%`;
+          globalProgressBar.style.width = `${globalProgressStart}%`;
+
+          const ext = fileObj.file.name.split('.').pop().toLowerCase();
+          
+          try {
+            if (ext === 'ifc') {
+              let convResult = fileObj.convertedData;
+              if (!convResult) {
+                updateFileUI(fileObj, 5, 'Iniciando convertidor...');
+                addLog(`[${fileObj.file.name}] Iniciando conversión IFC en el navegador...`);
+
+                updateFileUI(fileObj, 10, 'Convirtiendo IFC...');
+                addLog(`[${fileObj.file.name}] Convirtiendo con WebAssembly...`);
+
+                convResult = await convertIfcInBrowser(fileObj);
+              }
+              const { fragBase64, jsonBase64, baseName } = convResult;
+
+              updateFileUI(fileObj, 35, 'Subiendo fragmento...');
+              addLog(`[${fileObj.file.name}] Subiendo fragmento (.frag)...`);
+              const fragBlob = base64ToBlob(fragBase64, 'application/octet-stream');
+              const fragUploadResult = await uploadToDriveResumable(fragBlob, `${baseName}.frag`, 'application/octet-stream', fileObj, (pct) => {
+                updateFileUI(fileObj, Math.round(35 + (pct * 0.2)), 'Subiendo fragmento...');
+              });
+              const fragFileId = fragUploadResult.fileId;
+
+              updateFileUI(fileObj, 55, 'Subiendo propiedades...');
+              addLog(`[${fileObj.file.name}] Subiendo propiedades (.json)...`);
+              const jsonBlob = base64ToBlob(jsonBase64, 'application/json');
+              await uploadToDriveResumable(jsonBlob, `${baseName}.json`, 'application/json', fileObj, (pct) => {
+                updateFileUI(fileObj, Math.round(55 + (pct * 0.2)), 'Subiendo propiedades...');
+              });
+
+              updateFileUI(fileObj, 75, 'Subiendo IFC original...');
+              addLog(`[${fileObj.file.name}] Subiendo IFC original para el registro...`);
+              fileObj._ifcConvertedFragId = fragFileId;
+              fileObj._ifcConvertedFragName = `${baseName}.frag`;
+              await uploadToDriveResumable(fileObj.file, fileObj.file.name, 'application/octet-stream', fileObj, (pct) => {
+                updateFileUI(fileObj, Math.round(75 + (pct * 0.2)), 'Subiendo IFC...');
+              });
+
+              updateFileUI(fileObj, 100, 'Completado');
+              addLog(`[${fileObj.file.name}] ¡IFC convertido y subido con éxito! (.frag + .json + .ifc)`);
+            } else {
+              updateFileUI(fileObj, 25, 'Iniciando subida...');
+              addLog(`[${fileObj.file.name}] Subiendo archivo directo...`);
+              
+              let mimeType = 'application/octet-stream';
+              if (ext === 'pdf') mimeType = 'application/pdf';
+              else if (ext === 'dwg') mimeType = 'image/vnd.dwg';
+              else if (ext === 'json') mimeType = 'application/json';
+              else if (ext === 'frag') mimeType = 'application/octet-stream';
+
+              await uploadToDriveResumable(fileObj.file, fileObj.file.name, mimeType, fileObj, (pct) => {
+                updateFileUI(fileObj, Math.round(25 + (pct * 0.7)), 'Subiendo...');
+              });
+              
+              updateFileUI(fileObj, 100, 'Completado');
+              addLog(`[${fileObj.file.name}] ¡Subido con éxito!`);
+            }
+          } catch (err) {
+            console.error(err);
+            updateFileUI(fileObj, 0, `Error: ${err.message}`);
+            addLog(`[${fileObj.file.name}] ERROR: ${err.message}`);
+          }
+        }
+
+        globalStatusText.textContent = 'Proceso de subida completado.';
+        globalStatusPercentage.textContent = '100%';
+        globalProgressBar.style.width = '100%';
+
+        isUploading = false;
+        uploadBtn.disabled = false;
+        uploadBtn.textContent = 'Completado';
+        clearQueueBtn.classList.remove('hidden');
+        
+        loadProjectFiles();
+      });
+
+      // Helper: clean specialty folder string
+      const cleanSpecialty = (folder) => {
+        if (!folder) return 'General';
+        const str = String(folder).replace(/^\.?estados\/?/i, '').replace(/^\.?versiones\/?/i, '').trim();
+        if (!str || str.startsWith('.')) return 'General';
+        const parts = str.split('/').filter(Boolean);
+        if (parts.length === 0) return 'General';
+        const last = parts[parts.length - 1];
+        if (last.toLowerCase() === 'compartido' || last.toLowerCase() === 'publicado' || last.toLowerCase() === 'en_progreso') {
+          return parts.length > 1 ? parts[0] : 'General';
+        }
+        return last.charAt(0).toUpperCase() + last.slice(1);
+      };
+
+      // Helper: get specialty based on user's delivery teams (fallback to folder specialty)
+      function getFileDisplaySpecialty(f) {
+        if (!f) return 'General';
+        const email = String(f.changedByEmail || '').toLowerCase().trim();
+        if (email && email !== 'unassigned@nora.cde') {
+          const userTeams = getUserDeliveryTeams(email);
+          if (userTeams && userTeams.length > 0) {
+            return userTeams.join(', ');
+          }
+        }
+        return cleanSpecialty(f.folder);
+      }
+
+      // Helper: auto calculate next version
+      const calculateNextVersion = (verStr) => {
+        if (!verStr) return 'v1.1';
+        const match = verStr.match(/^v?(\d+)\.(\d+)$/i);
+        if (match) {
+          const major = parseInt(match[1], 10);
+          const minor = parseInt(match[2], 10);
+          return `v${major}.${minor + 1}`;
+        }
+        return 'v1.1';
+      };
+
+      // Load Drive Project Files List with Workflow Status and Version Resolution
+      async function loadProjectFiles() {
+        if (!activeProject) return;
+
+        listLoading.classList.remove('hidden');
+        listEmpty.classList.add('hidden');
+        filesTable.classList.add('hidden');
+        refreshIcon.classList.add('animate-spin');
+
+        const ds = activeProject.dataSources || {};
+        const scriptUrl = ds.driveScriptUrl || DEFAULT_DRIVE_SCRIPT_URL;
+        const projectSlug = activeProject.slug || slugify(activeProject.name);
+
+        try {
+          // 1. Fetch Drive Files List
+          const listRes = await fetch(scriptUrl, {
+            method: 'POST',
+            mode: 'cors',
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: JSON.stringify({
+              action: 'list',
+              folderId: ds.driveFolderId || '',
+              driveFolderName: ds.driveFolderName || activeProject.name,
+              project: projectSlug
+            })
+          });
+          const listData = listRes.ok ? await listRes.json() : { models: [], dwgs: [], pdfs: [] };
+
+          // 2. Fetch Status & Version History from Sheets
+          let statusEntries = [];
+          try {
+            const statusRes = await fetch(scriptUrl, {
+              method: 'POST',
+              mode: 'cors',
+              headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+              body: JSON.stringify({
+                action: 'listStatus',
+                project: projectSlug
+              })
+            });
+            if (statusRes.ok) {
+              const sData = await statusRes.json();
+              statusEntries = Array.isArray(sData.entries) ? sData.entries : [];
+            }
+          } catch (se) {
+            console.warn('Status history fetch error:', se);
+          }
+
+          // Sort statusEntries chronologically so most recent statuses take precedence
+          statusEntries.sort((a, b) => new Date(a.changedAt || 0) - new Date(b.changedAt || 0));
+
+          // Helper to get status matches for a file chronologically
+          const getStatusMatchesForFile = (fid, fname) => {
+            const matches = {
+              EN_PROGRESO: null,
+              COMPARTIDO: null,
+              PUBLICADO: null
+            };
+            
+            statusEntries.forEach(entry => {
+              const hasId = entry.originalFileId || entry.fileId;
+              const matchesId = (entry.originalFileId && entry.originalFileId === fid) ||
+                                (entry.fileId && entry.fileId === fid);
+              
+              let isMatch = false;
+              if (hasId) {
+                isMatch = matchesId;
+              } else {
+                isMatch = entry.filename && entry.filename.toLowerCase() === fname.toLowerCase();
+              }
+              
+              if (isMatch) {
+                const status = entry.status;
+                if (status === 'EN_PROGRESO' || status === 'COMPARTIDO' || status === 'PUBLICADO') {
+                  matches[status] = entry;
+                }
+              }
+            });
+            
+            return matches;
+          };
+
+          // Consolidate Drive files into allProjectFiles.
+          // Composite keys using folder/name|STATUS ensure that files in different states do not overwrite each other.
+          const filesByPath = new Map();
+
+          const addFiles = (list, type) => {
+            (list || []).forEach(item => {
+              const fname = item.name || item.filename;
+              const fld = item.folder || 'General';
+              
+              // Older responses expose fragId; the unified model list exposes fileId
+              // for every supported extension.
+              const fid = type === 'model' ? (item.fragId || item.fileId || item.path) : item.fileId;
+              const matches = getStatusMatchesForFile(fid, fname);
+
+              // 1. Always keep the EN_PROGRESO (WIP) version of the file
+              const progMatch = matches.EN_PROGRESO;
+              const progFileObj = {
+                fileId: fid, // Original physical file ID
+                originalFileId: fid,
+                jsonId: type === 'model' ? (item.jsonId || (progMatch ? progMatch.jsonId : '')) : '',
+                name: fname,
+                filename: fname,
+                type: type,
+                folder: fld,
+                lastUpdated: progMatch?.changedAt || item.lastUpdated,
+                status: 'EN_PROGRESO',
+                version: progMatch?.version || 'v1.0',
+                comments: progMatch?.comments || '',
+                changedBy: (progMatch?.changedBy && progMatch.changedBy.trim()) || item.ownerName || 'UNASSIGNED',
+                changedByEmail: (progMatch?.changedByEmail && progMatch.changedByEmail.trim()) || item.ownerEmail || 'unassigned@nora.cde',
+                deliveryTeams: parseStoredDeliveryTeams(progMatch?.deliveryTeams || '')
+              };
+
+              const progKey = (fld + '/' + fname + '|EN_PROGRESO').toLowerCase();
+              const prevProg = filesByPath.get(progKey);
+              if (!prevProg || new Date(progFileObj.lastUpdated).getTime() >= new Date(prevProg.lastUpdated).getTime()) {
+                filesByPath.set(progKey, progFileObj);
+              }
+
+              // 2. If promoted to COMPARTIDO, add that entry
+              if (matches.COMPARTIDO) {
+                const compMatch = matches.COMPARTIDO;
+                const compFileObj = {
+                  fileId: compMatch.fileId || fid, // Use copied file's ID
+                  originalFileId: fid,
+                  jsonId: type === 'model' ? (compMatch.jsonId || '') : '',
+                  name: fname,
+                  filename: fname,
+                  type: type,
+                  folder: fld,
+                  lastUpdated: compMatch.changedAt || item.lastUpdated,
+                  status: 'COMPARTIDO',
+                  version: compMatch.version || 'v1.0',
+                  comments: compMatch.comments || '',
+                  changedBy: (compMatch.changedBy && compMatch.changedBy.trim()) || 'UNASSIGNED',
+                  changedByEmail: (compMatch.changedByEmail && compMatch.changedByEmail.trim()) || 'unassigned@nora.cde',
+                  deliveryTeams: parseStoredDeliveryTeams(compMatch.deliveryTeams || '')
+                };
+
+                const compKey = (fld + '/' + fname + '|COMPARTIDO').toLowerCase();
+                const prevComp = filesByPath.get(compKey);
+                if (!prevComp || new Date(compFileObj.lastUpdated).getTime() >= new Date(prevComp.lastUpdated).getTime()) {
+                  filesByPath.set(compKey, compFileObj);
+                }
+              }
+
+              // 3. If promoted to PUBLICADO, add that entry
+              if (matches.PUBLICADO) {
+                const pubMatch = matches.PUBLICADO;
+                const pubFileObj = {
+                  fileId: pubMatch.fileId || fid, // Use copied file's ID
+                  originalFileId: fid,
+                  jsonId: type === 'model' ? (pubMatch.jsonId || '') : '',
+                  name: fname,
+                  filename: fname,
+                  type: type,
+                  folder: fld,
+                  lastUpdated: pubMatch.changedAt || item.lastUpdated,
+                  status: 'PUBLICADO',
+                  version: pubMatch.version || 'v1.0',
+                  comments: pubMatch.comments || '',
+                  changedBy: (pubMatch.changedBy && pubMatch.changedBy.trim()) || 'UNASSIGNED',
+                  changedByEmail: (pubMatch.changedByEmail && pubMatch.changedByEmail.trim()) || 'unassigned@nora.cde',
+                  deliveryTeams: parseStoredDeliveryTeams(pubMatch.deliveryTeams || '')
+                };
+
+                const pubKey = (fld + '/' + fname + '|PUBLICADO').toLowerCase();
+                const prevPub = filesByPath.get(pubKey);
+                if (!prevPub || new Date(pubFileObj.lastUpdated).getTime() >= new Date(prevPub.lastUpdated).getTime()) {
+                  filesByPath.set(pubKey, pubFileObj);
+                }
+              }
+            });
+          };
+
+          // allModels contains the complete set of supported 3D, BIM, GIS and point-cloud files.
+          // Fall back to models so older deployments of the Apps Script keep working.
+          addFiles(listData.allModels || listData.models, 'model');
+          addFiles(listData.pdfs, 'pdf');
+          addFiles(listData.dwgs, 'dwg');
+
+          const rawProjectFiles = Array.from(filesByPath.values());
+
+          // Emparejar IFC con FRAG por nombre base + estado, y ocultar el FRAG derivado
+          // Construir mapa de frags indexado por (baseName|status)
+          const fragsByKey = new Map();
+          rawProjectFiles.forEach(f => {
+            if (getFileExtension(f.name) === 'frag') {
+              const base = f.name.replace(/\.frag$/i, '').toLowerCase();
+              const key = `${base}|${f.status}`;
+              fragsByKey.set(key, f);
+            }
+          });
+          // Para cada IFC, buscar un FRAG del mismo nombre base y mismo estado
+          rawProjectFiles.forEach(f => {
+            if (getFileExtension(f.name) === 'ifc') {
+              const base = f.name.replace(/\.ifc$/i, '').toLowerCase();
+              // Primero: mismo estado. Luego: cualquier estado como fallback
+              const pairedFrag = fragsByKey.get(`${base}|${f.status}`)
+                || fragsByKey.get(`${base}|EN_PROGRESO`);
+              if (pairedFrag) {
+                f.pairedFragId = pairedFrag.fileId;
+                f.pairedFragName = pairedFrag.name;
+                f.pairedFragJsonId = pairedFrag.jsonId || '';
+                // Marcar el FRAG como derivado: no se mostrará en el listado
+                pairedFrag._derivedFromIfc = true;
+              }
+            }
+          });
+
+          // Excluir FRAG derivados de IFC y archivos no autorizados
+          allProjectFiles = rawProjectFiles.filter(f => isUserAuthorizedForFile(f, 'view') && !f._derivedFromIfc);
+          updateTabCounts();
+          renderDriveFilesTable();
+        } catch (err) {
+          console.error(err);
+          addLog('Error cargando archivos del proyecto: ' + err.message);
+          listLoading.classList.add('hidden');
+          listEmpty.classList.remove('hidden');
+        } finally {
+          refreshIcon.classList.remove('animate-spin');
+        }
+      }
+
+      function updateTabCounts() {
+        if (!scountProgreso) return;
+        scountProgreso.textContent = allProjectFiles.filter(f => f.status === 'EN_PROGRESO' && isVisibleInProjectFilesView(f)).length;
+        scountCompartido.textContent = allProjectFiles.filter(f => f.status === 'COMPARTIDO' && isVisibleInProjectFilesView(f)).length;
+        scountPublicado.textContent = allProjectFiles.filter(f => f.status === 'PUBLICADO' && isVisibleInProjectFilesView(f)).length;
+
+        const currentInState = allProjectFiles.filter(f => f.status === currentStatusTab && isVisibleInProjectFilesView(f));
+        scountSubModels.textContent = currentInState.filter(f => f.type === 'model' || isModel3DExtension(getFileExtension(f.name))).length;
+        scountSubPdfs.textContent = currentInState.filter(f => f.type === 'pdf' && !isModel3DExtension(getFileExtension(f.name))).length;
+        scountSubDwgs.textContent = currentInState.filter(f => (f.type === 'dwg') && !isModel3DExtension(getFileExtension(f.name))).length;
+      }
+
+      function renderDriveFilesTable() {
+        listLoading.classList.add('hidden');
+        updateTabCounts();
+
+        const filterVal = filesSearch.value.trim().toLowerCase();
+        const typeFilter = SUBTYPE_MAP[currentStatusSubTab];
+
+        let listToRender = allProjectFiles.filter(f => {
+          if (f.status !== currentStatusTab) return false;
+          if (!isVisibleInProjectFilesView(f)) return false;
+          const ext = getFileExtension(f.name);
+          const is3D = isModel3DExtension(ext);
+          if (currentStatusSubTab === 'models') {
+            return f.type === typeFilter || is3D;
+          } else {
+            return f.type === typeFilter && !is3D;
+          }
+        });
+
+        if (filterVal) {
+          listToRender = listToRender.filter(f => f.name.toLowerCase().includes(filterVal));
+        }
+
+        if (listToRender.length === 0) {
+          listEmpty.classList.remove('hidden');
+          filesTable.classList.add('hidden');
+          return;
+        }
+
+        listEmpty.classList.add('hidden');
+        filesTable.classList.remove('hidden');
+
+        const formatDate = (isoString) => {
+          if (!isoString) return '--';
+          const d = new Date(isoString);
+          const dd = String(d.getDate()).padStart(2, '0');
+          const mm = String(d.getMonth() + 1).padStart(2, '0');
+          const yyyy = d.getFullYear();
+          const hh = String(d.getHours()).padStart(2, '0');
+          const min = String(d.getMinutes()).padStart(2, '0');
+          return `${dd}/${mm}/${yyyy} ${hh}:${min}`;
+        };
+
+        const getOpenViewerButtonHtml = (f) => {
+          if (!activeProject) return '';
+          const ext = getFileExtension(f.name);
+          let viewerPath = '';
+          let viewerIcon = '';
+          let viewerFileId = f.fileId;
+          let viewerFileName = f.name;
+          let viewerJsonId = f.jsonId || '';
+
+          if (ext === 'pdf') {
+            viewerPath = 'VSR_PDFA/index.html';
+            viewerIcon = 'picture_as_pdf';
+          } else if (ext === 'dwg' || ext === 'dxf') {
+            viewerPath = 'VSR_DWGA/index.html';
+            viewerIcon = 'architecture';
+          } else if (ext === 'frag') {
+            viewerPath = 'VSR_IFCA/index.html';
+            viewerIcon = 'view_in_ar';
+          } else if (ext === 'ifc') {
+            // Para IFC: usar el .frag emparejado si existe, si no, no mostrar botón del visor
+            if (!f.pairedFragId) return '';
+            viewerPath = 'VSR_IFCA/index.html';
+            viewerIcon = 'view_in_ar';
+            viewerFileId = f.pairedFragId;
+            viewerFileName = f.pairedFragName || f.name.replace(/\.ifc$/i, '.frag');
+            viewerJsonId = f.pairedFragJsonId || f.jsonId || '';
+          } else {
+            return ''; // Not compatible
+          }
+
+          const ds = activeProject.dataSources || {};
+          const projectSlug = activeProject.slug || slugify(activeProject.name);
+          const driveFolderName = ds.driveFolderName || activeProject.name;
+          const driveFolderId = ds.driveFolderId || '';
+          const driveScriptUrl = ds.driveScriptUrl || '';
+
+          const url = new URL(viewerPath, window.location.href);
+          if (companyId) url.searchParams.set('empresa', companyId);
+          url.searchParams.set('project', projectSlug);
+          if (driveFolderName) url.searchParams.set('driveFolderName', driveFolderName);
+          if (driveFolderId) url.searchParams.set('driveFolderId', driveFolderId);
+          if (driveScriptUrl) url.searchParams.set('driveScriptUrl', driveScriptUrl);
+          
+          if (viewerFileId) url.searchParams.set('fileId', viewerFileId);
+          if (viewerFileName) url.searchParams.set('file', viewerFileName);
+          if (viewerJsonId) url.searchParams.set('jsonId', viewerJsonId);
+
+          // Tooltip diferente para IFC que apunta a su FRAG
+          const tooltip = ext === 'ifc' ? 'Abrir en Visor (via .frag convertido)' : 'Abrir en Visor';
+
+          return `
+            <a href="${url.toString()}" target="_blank" class="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-[10px] uppercase tracking-wider shadow-sm transition-all whitespace-nowrap" title="${tooltip}">
+              <span class="material-symbols-outlined text-[13px]">${viewerIcon}</span> VISOR
+            </a>
+          `;
+        };
+
+        const renderFileRow = (f, extraClass = '') => {
+          const specialty = getFileDisplaySpecialty(f);
+          const ext = getFileExtension(f.name);
+          const { icon, iconClass } = f.type === 'model'
+            ? getModelFileIcon(ext)
+            : (ext === 'pdf'
+              ? { icon: 'picture_as_pdf', iconClass: 'text-red-500' }
+              : ext === 'dwg' || ext === 'dxf'
+                ? { icon: 'architecture', iconClass: 'text-amber-500' }
+                : { icon: 'description', iconClass: 'text-blue-500' });
+
+          const fileDataStr = encodeURIComponent(JSON.stringify(f));
+          const isModel = f.type === 'model';
+          const deleteTitle = isModel && f.jsonId ? 'Eliminar modelo (.frag + .json)' : 'Eliminar archivo';
+          const currentVer = f.version || 'v1.0';
+
+          // Status Badge Pill
+          let statusBadge = '';
+          if (f.status === 'EN_PROGRESO') {
+            statusBadge = `
+              <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-amber-50 dark:bg-amber-950/50 text-amber-700 dark:text-amber-300 font-semibold text-[11px] border border-amber-200 dark:border-amber-800/40">
+                <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span> En Progreso
+              </span>`;
+          } else if (f.status === 'COMPARTIDO') {
+            statusBadge = `
+              <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-blue-50 dark:bg-blue-950/50 text-blue-700 dark:text-blue-300 font-semibold text-[11px] border border-blue-200 dark:border-blue-800/40">
+                <span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span> Compartido
+              </span>`;
+          } else {
+            statusBadge = `
+              <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-green-50 dark:bg-green-950/50 text-green-700 dark:text-green-300 font-semibold text-[11px] border border-green-200 dark:border-green-800/40">
+                <span class="w-1.5 h-1.5 rounded-full bg-green-500"></span> Publicado
+              </span>`;
+          }
+
+          const canManage = isUserAuthorizedForFile(f, 'manage');
+          const openButton = getOpenViewerButtonHtml(f);
+
+          // Botón de descarga del archivo original desde Google Drive
+          const downloadFileId = f.fileId || '';
+          const downloadButton = downloadFileId ? `
+            <a href="https://drive.google.com/uc?export=download&id=${encodeURIComponent(downloadFileId)}" target="_blank" rel="noopener noreferrer"
+               class="inline-flex items-center justify-center p-1.5 rounded-lg text-slate-500 hover:text-emerald-600 hover:bg-emerald-50 dark:hover:bg-emerald-950/30 transition-colors"
+               title="Descargar ${f.name}">
+              <span class="material-symbols-outlined text-[16px]">download</span>
+            </a>
+          ` : '';
+
+          // Action buttons depending on state
+          let actionButtons = '';
+          if (currentStatusTab === 'EN_PROGRESO') {
+            actionButtons = `
+              <div class="flex items-center justify-end gap-1.5 flex-wrap sm:flex-nowrap">
+                ${openButton}
+                ${downloadButton}
+                ${canManage ? `
+                <button onclick="window.promoteFile(this, '${fileDataStr}', 'COMPARTIDO')" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-bold text-[10px] uppercase tracking-wider shadow-sm transition-all whitespace-nowrap" title="Pasar a Compartido">
+                  <span class="material-symbols-outlined text-[13px]">share</span> COMPARTIDO
+                </button>
+                <button onclick="window.promoteFile(this, '${fileDataStr}', 'PUBLICADO')" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-green-600 hover:bg-green-700 text-white font-bold text-[10px] uppercase tracking-wider shadow-sm transition-all whitespace-nowrap" title="Pasar a Publicado">
+                  <span class="material-symbols-outlined text-[13px]">publish</span> PUBLICADO
+                </button>
+                <button onclick="window.openNewVersionModal('${fileDataStr}')" class="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-indigo-50 dark:bg-indigo-950/40 text-indigo-700 dark:text-indigo-300 font-semibold text-[10px] uppercase tracking-wider hover:bg-indigo-100 dark:hover:bg-indigo-900/40 transition-colors whitespace-nowrap" title="Guardar Nueva Versión">
+                  <span class="material-symbols-outlined text-[13px]">history_edu</span> + Versión
+                </button>
+                ` : ''}
+                <button onclick="window.openVersionHistoryModal('${fileDataStr}')" class="inline-flex items-center justify-center p-1.5 rounded-lg text-slate-500 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-950/30 transition-colors" title="Historial de Versiones">
+                  <span class="material-symbols-outlined text-[16px]">history</span>
+                </button>
+                ${canManage ? `
+                <button onclick="window.deleteProjectFile(this, '${fileDataStr}')" class="inline-flex items-center justify-center p-1.5 rounded-lg text-slate-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/30 transition-colors" title="${deleteTitle}">
+                  <span class="material-symbols-outlined text-[16px]">delete</span>
+                </button>
+                ` : ''}
+              </div>`;
+          } else if (currentStatusTab === 'COMPARTIDO') {
+            actionButtons = `
+              <div class="flex items-center justify-end gap-1.5 flex-wrap sm:flex-nowrap">
+                ${openButton}
+                ${downloadButton}
+                ${canManage ? `
+                <button onclick="window.promoteFile(this, '${fileDataStr}', 'PUBLICADO')" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-green-600 hover:bg-green-700 text-white font-bold text-[10px] uppercase tracking-wider shadow-sm transition-all whitespace-nowrap" title="Pasar a Publicado">
+                  <span class="material-symbols-outlined text-[13px]">publish</span> PUBLICADO
+                </button>
+                <button onclick="window.openNewVersionModal('${fileDataStr}')" class="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-indigo-50 dark:bg-indigo-950/40 text-indigo-700 dark:text-indigo-300 font-semibold text-[10px] uppercase tracking-wider hover:bg-indigo-100 dark:hover:bg-indigo-900/40 transition-colors whitespace-nowrap" title="Guardar Nueva Versión">
+                  <span class="material-symbols-outlined text-[13px]">history_edu</span> + Versión
+                </button>
+                ` : ''}
+                <button onclick="window.openVersionHistoryModal('${fileDataStr}')" class="inline-flex items-center justify-center p-1.5 rounded-lg text-slate-500 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-950/30 transition-colors" title="Historial de Versiones">
+                  <span class="material-symbols-outlined text-[16px]">history</span>
+                </button>
+                ${canManage ? `
+                <button onclick="window.deleteProjectFile(this, '${fileDataStr}')" class="inline-flex items-center justify-center p-1.5 rounded-lg text-slate-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/30 transition-colors" title="${deleteTitle}">
+                  <span class="material-symbols-outlined text-[16px]">delete</span>
+                </button>
+                ` : ''}
+              </div>`;
+          } else {
+            actionButtons = `
+              <div class="flex items-center justify-end gap-1.5 flex-wrap sm:flex-nowrap">
+                ${openButton}
+                ${downloadButton}
+                <span class="inline-flex items-center gap-1 text-green-600 dark:text-green-400 font-bold text-[10px] uppercase tracking-wider mr-1">
+                  <span class="material-symbols-outlined text-[14px]">verified</span> PUBLICADO
+                </span>
+                ${canManage ? `
+                <button onclick="window.openNewVersionModal('${fileDataStr}')" class="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-indigo-50 dark:bg-indigo-950/40 text-indigo-700 dark:text-indigo-300 font-semibold text-[10px] uppercase tracking-wider hover:bg-indigo-100 dark:hover:bg-indigo-900/40 transition-colors whitespace-nowrap" title="Guardar Nueva Versión">
+                  <span class="material-symbols-outlined text-[13px]">history_edu</span> + Versión
+                </button>
+                ` : ''}
+                <button onclick="window.openVersionHistoryModal('${fileDataStr}')" class="inline-flex items-center justify-center p-1.5 rounded-lg text-slate-500 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-950/30 transition-colors" title="Historial de Versiones">
+                  <span class="material-symbols-outlined text-[16px]">history</span>
+                </button>
+                ${canManage ? `
+                <button onclick="window.deleteProjectFile(this, '${fileDataStr}')" class="inline-flex items-center justify-center p-1.5 rounded-lg text-slate-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/30 transition-colors" title="${deleteTitle}">
+                  <span class="material-symbols-outlined text-[16px]">delete</span>
+                </button>
+                ` : ''}
+              </div>`;
+          }
+
+          return `
+            <tr class="${extraClass} hover:bg-slate-50/80 dark:hover:bg-slate-800/40 transition-colors">
+              <td class="py-3 px-4 font-medium text-slate-800 dark:text-slate-200">
+                <div class="flex items-center gap-2">
+                  <span class="material-symbols-outlined text-base ${iconClass} shrink-0">${icon}</span>
+                  <span class="truncate max-w-xs sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-3xl" title="${f.name}">${f.name}</span>
+                  ${isModel && f.jsonId ? '<span class="text-[9px] px-1.5 py-0.5 rounded bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 font-mono font-medium shrink-0">+json</span>' : ''}
+                  ${ext === 'ifc' && f.pairedFragId ? '<span class="text-[9px] px-1.5 py-0.5 rounded bg-indigo-100 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 font-mono font-medium shrink-0" title="Convertido a .frag">→FRAG</span>' : ''}
+                  ${ext === 'ifc' && !f.pairedFragId ? '<span class="text-[9px] px-1.5 py-0.5 rounded bg-amber-100 dark:bg-amber-950 text-amber-700 dark:text-amber-300 font-mono font-medium shrink-0" title="Sin conversión FRAG disponible">sin FRAG</span>' : ''}
+                </div>
+              </td>
+              <td class="py-3 px-3 text-center whitespace-nowrap">
+                <button onclick="window.openVersionHistoryModal('${fileDataStr}')" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-slate-100 hover:bg-indigo-50 text-slate-700 hover:text-indigo-700 dark:bg-slate-800 dark:hover:bg-indigo-950/60 dark:text-slate-300 dark:hover:text-indigo-300 text-[11px] font-semibold transition-colors" title="Ver versiones guardadas">
+                  <span class="material-symbols-outlined text-[14px] text-indigo-500">history</span> Versiones
+                </button>
+              </td>
+              <td class="py-3 px-4 text-slate-600 dark:text-slate-300 font-medium whitespace-nowrap">${specialty}</td>
+              <td class="py-3 px-4 whitespace-nowrap">${statusBadge}</td>
+              <td class="py-3 px-4 text-slate-500 dark:text-slate-400 whitespace-nowrap">${formatDate(f.lastUpdated)}</td>
+              <td class="py-3 px-4 whitespace-nowrap">
+                <div class="flex flex-col">
+                  <span class="text-slate-700 dark:text-slate-300 font-medium text-xs">${f.changedBy || '—'}</span>
+                  ${f.changedByEmail ? `<span class="text-slate-400 dark:text-slate-500 text-[10px]">${f.changedByEmail}</span>` : ''}
+                </div>
+              </td>
+              <td class="py-3 px-4 text-right whitespace-nowrap">${actionButtons}</td>
+            </tr>
+          `;
+        };
+
+        if (currentStatusTab === 'COMPARTIDO' || currentStatusTab === 'PUBLICADO') {
+          const groups = new Map();
+          listToRender.forEach(f => {
+            const specialty = getFileDisplaySpecialty(f) || 'General';
+            if (!groups.has(specialty)) groups.set(specialty, []);
+            groups.get(specialty).push(f);
+          });
+
+          const sortedEntries = Array.from(groups.entries()).sort((a, b) => {
+            return a[0].localeCompare(b[0], 'es', { sensitivity: 'base' });
+          });
+
+          filesTableBody.innerHTML = sortedEntries.map(([specialty, files]) => {
+            const collapsed = collapsedSpecialtyGroups.has(specialty);
+            const label = specialty;
+            const rows = files.map(f => renderFileRow(f, `specialty-group-${specialty.replace(/\s+/g, '-')}${collapsed ? ' hidden' : ''}`)).join('');
+            return `
+              <tr class="bg-slate-50 dark:bg-slate-800/60 border-y border-slate-200 dark:border-slate-700">
+                <td colspan="7" class="p-0">
+                  <button type="button" data-specialty-group-toggle="${specialty}" class="w-full flex items-center justify-between gap-3 px-4 py-3 text-left hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+                    <span class="flex items-center gap-2 font-bold text-slate-700 dark:text-slate-200">
+                      <span class="material-symbols-outlined text-blue-600 dark:text-blue-400">${collapsed ? 'chevron_right' : 'expand_more'}</span>
+                      ${label}
+                      <span class="text-[10px] px-1.5 py-0.5 rounded-full bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-300">${files.length}</span>
+                    </span>
+                    <span class="text-[10px] font-medium text-slate-400">${collapsed ? 'Expandir' : 'Recoger'}</span>
+                  </button>
+                </td>
+              </tr>${rows}`;
+          }).join('');
+
+          filesTableBody.querySelectorAll('[data-specialty-group-toggle]').forEach(button => {
+            button.addEventListener('click', () => {
+              const specialty = button.dataset.specialtyGroupToggle;
+              if (collapsedSpecialtyGroups.has(specialty)) collapsedSpecialtyGroups.delete(specialty);
+              else collapsedSpecialtyGroups.add(specialty);
+              renderDriveFilesTable();
+            });
+          });
+          return;
+        }
+
+        if (currentStatusSubTab !== 'models') {
+          filesTableBody.innerHTML = listToRender.map(f => renderFileRow(f)).join('');
+          return;
+        }
+
+        const groups = new Map();
+        listToRender.forEach(f => {
+          const extension = getFileExtension(f.name);
+          if (!groups.has(extension)) groups.set(extension, []);
+          groups.get(extension).push(f);
+        });
+
+        const sortedEntries = Array.from(groups.entries()).sort((a, b) => {
+          const idxA = MODEL_TYPE_ORDER.indexOf(a[0]);
+          const idxB = MODEL_TYPE_ORDER.indexOf(b[0]);
+          if (idxA === -1 && idxB === -1) return a[0].localeCompare(b[0]);
+          if (idxA === -1) return 1;
+          if (idxB === -1) return -1;
+          return idxA - idxB;
+        });
+
+        filesTableBody.innerHTML = sortedEntries.map(([extension, files]) => {
+          const collapsed = collapsedModelGroups.has(extension);
+          const label = MODEL_TYPE_LABELS[extension] || `Otros modelos (.${extension})`;
+          const rows = files.map(f => renderFileRow(f, `model-group-${extension}${collapsed ? ' hidden' : ''}`)).join('');
+          return `
+            <tr class="bg-slate-50 dark:bg-slate-800/60 border-y border-slate-200 dark:border-slate-700">
+              <td colspan="7" class="p-0">
+                <button type="button" data-model-group-toggle="${extension}" class="w-full flex items-center justify-between gap-3 px-4 py-3 text-left hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+                  <span class="flex items-center gap-2 font-bold text-slate-700 dark:text-slate-200">
+                    <span class="material-symbols-outlined text-blue-600 dark:text-blue-400">${collapsed ? 'chevron_right' : 'expand_more'}</span>
+                    ${label}
+                    <span class="text-[10px] px-1.5 py-0.5 rounded-full bg-blue-100 dark:bg-blue-950 text-blue-700 dark:text-blue-300">${files.length}</span>
+                  </span>
+                  <span class="text-[10px] font-medium text-slate-400">${collapsed ? 'Expandir' : 'Recoger'}</span>
+                </button>
+              </td>
+            </tr>${rows}`;
+        }).join('');
+
+        filesTableBody.querySelectorAll('[data-model-group-toggle]').forEach(button => {
+          button.addEventListener('click', () => {
+            const extension = button.dataset.modelGroupToggle;
+            if (collapsedModelGroups.has(extension)) collapsedModelGroups.delete(extension);
+            else collapsedModelGroups.add(extension);
+            renderDriveFilesTable();
+          });
+        });
+      }
+
+      // ==========================================
+      // VERSION MANAGEMENT MODALS & HANDLERS
+      // ==========================================
+      window.openNewVersionModal = (encodedData) => {
+        let f;
+        try { f = JSON.parse(decodeURIComponent(encodedData)); } catch(e) { return; }
+        if (!f) return;
+
+        if (!isUserAuthorizedForFile(f, 'manage')) {
+          alert('No tienes autorización para realizar esta acción sobre este archivo.');
+          return;
+        }
+
+        targetVersionFile = f;
+
+        const specialty = getFileDisplaySpecialty(f);
+        const currentVer = f.version || 'v1.0';
+        const nextVer = calculateNextVersion(currentVer);
+
+        verModalFilename.textContent = f.name;
+        verModalSpecialty.textContent = `Especialidad: ${specialty}`;
+        verModalCurrentVer.textContent = `Actual: ${currentVer}`;
+        verModalCurrentState.textContent = f.status === 'EN_PROGRESO' ? 'En Progreso' : (f.status === 'COMPARTIDO' ? 'Compartido' : 'Publicado');
+
+        const ext = f.name.split('.').pop().toLowerCase();
+        let icon = 'description';
+        let iconClass = 'text-blue-500';
+        if (ext === 'pdf') { icon = 'picture_as_pdf'; iconClass = 'text-red-500'; }
+        else if (ext === 'dwg' || ext === 'dxf') { icon = 'architecture'; iconClass = 'text-amber-500'; }
+        else if (ext === 'frag') { icon = 'view_in_ar'; iconClass = 'text-indigo-500'; }
+        else if (ext === 'json') { icon = 'data_object'; iconClass = 'text-emerald-500'; }
+        verModalFileIcon.textContent = icon;
+        verModalFileIcon.className = `material-symbols-outlined text-2xl ${iconClass}`;
+
+        verInputTag.value = nextVer;
+        verInputComments.value = '';
+        verInputFile.value = '';
+
+        modalNewVersion.classList.remove('hidden');
+      };
+
+      const closeNewVersionModal = () => {
+        modalNewVersion.classList.add('hidden');
+        targetVersionFile = null;
+      };
+      btnCloseVerModal.addEventListener('click', closeNewVersionModal);
+      btnCancelVerModal.addEventListener('click', closeNewVersionModal);
+
+      btnSubmitVerModal.addEventListener('click', async () => {
+        if (!targetVersionFile || !activeProject) return;
+        const versionTag = verInputTag.value.trim();
+        const comments = verInputComments.value.trim();
+
+        if (!versionTag) {
+          alert('Por favor especifica un identificador de versión (ej. v1.1)');
+          verInputTag.focus();
+          return;
+        }
+
+        if (!comments) {
+          alert('Por favor describe los comentarios o cambios de esta versión.');
+          verInputComments.focus();
+          return;
+        }
+
+        const origBtnHtml = btnSubmitVerModal.innerHTML;
+        btnSubmitVerModal.disabled = true;
+        btnSubmitVerModal.innerHTML = `<span class="inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-1"></span> Guardando...`;
+
+        try {
+          const ds = activeProject.dataSources || {};
+          const scriptUrl = ds.driveScriptUrl || DEFAULT_DRIVE_SCRIPT_URL;
+
+          let uploadedFileId = '';
+          if (verInputFile.files && verInputFile.files.length > 0) {
+            const uploadedFile = verInputFile.files[0];
+            const ext = uploadedFile.name.split('.').pop().toLowerCase();
+            let contentType = 'application/octet-stream';
+            if (ext === 'pdf') contentType = 'application/pdf';
+            else if (ext === 'dwg') contentType = 'image/vnd.dwg';
+            else if (ext === 'json') contentType = 'application/json';
+
+            addLog(`[VERSIÓN] Iniciando subida resumible de ${uploadedFile.name}...`);
+            const uploadResult = await uploadToDriveResumable(uploadedFile, uploadedFile.name, contentType, null, (pct) => {
+              btnSubmitVerModal.innerHTML = `<span class="inline-block w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-1"></span> Subiendo ${pct}%...`;
+            });
+            uploadedFileId = uploadResult.fileId;
+          }
+
+          const payload = {
+            action: 'createVersion',
+            fileId: targetVersionFile.fileId || targetVersionFile.originalFileId,
+            jsonId: targetVersionFile.jsonId || '',
+            filename: targetVersionFile.name,
+            project: activeProject.slug || slugify(activeProject.name),
+            status: targetVersionFile.status || 'EN_PROGRESO',
+            version: versionTag,
+            comments: comments,
+            changedBy: userAccount ? (userAccount.name || '') : '',
+            changedByEmail: userAccount ? (userAccount.email || userAccount.username || '') : '',
+            deliveryTeams: targetVersionFile.deliveryTeams || resolveCurrentUserDeliveryTeams(),
+            originalFileId: targetVersionFile.originalFileId || targetVersionFile.fileId,
+            type: targetVersionFile.type || '',
+            folderId: ds.driveFolderId || '',
+            driveFolderName: ds.driveFolderName || activeProject.name,
+            uploadedFileId: uploadedFileId,
+            content: '',
+            contentType: ''
+          };
+
+          const res = await fetch(scriptUrl, {
+            method: 'POST',
+            mode: 'cors',
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: JSON.stringify(payload)
+          });
+
+          if (!res.ok) throw new Error(`Error en el servidor: ${res.statusText}`);
+          const data = await res.json();
+          if (data.status === 'error') throw new Error(data.message || 'Error al guardar la versión');
+
+          addLog(`[VERSIÓN] ${targetVersionFile.name} actualizada a ${versionTag} con respaldo en .versiones/`);
+          closeNewVersionModal();
+          await loadProjectFiles();
+        } catch(err) {
+          console.error(err);
+          alert(`Error guardando versión: ${err.message}`);
+        } finally {
+          btnSubmitVerModal.disabled = false;
+          btnSubmitVerModal.innerHTML = origBtnHtml;
+        }
+      });
+
+      // ==========================================
+      // VERSION HISTORY MODAL & RESTORE
+      // ==========================================
+      window.openVersionHistoryModal = async (encodedData) => {
+        let f;
+        try { f = JSON.parse(decodeURIComponent(encodedData)); } catch(e) { return; }
+        if (!f || !activeProject) return;
+
+        historyModalTitle.textContent = `Historial: ${f.name}`;
+        historyModalSubtitle.textContent = `Especialidad: ${getFileDisplaySpecialty(f)} | Estado actual: ${f.status}`;
+        modalVersionHistory.classList.remove('hidden');
+
+        historyLoading.classList.remove('hidden');
+        historyEmpty.classList.add('hidden');
+        historyList.classList.add('hidden');
+        historyList.innerHTML = '';
+
+        try {
+          const ds = activeProject.dataSources || {};
+          const scriptUrl = ds.driveScriptUrl || DEFAULT_DRIVE_SCRIPT_URL;
+
+          const res = await fetch(scriptUrl, {
+            method: 'POST',
+            mode: 'cors',
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: JSON.stringify({
+              action: 'listVersions',
+              project: activeProject.slug || slugify(activeProject.name),
+              filename: f.name,
+              originalFileId: f.originalFileId || f.fileId
+            })
+          });
+
+          const data = res.ok ? await res.json() : { versions: [] };
+          let versions = Array.isArray(data.versions) ? data.versions : [];
+
+          historyLoading.classList.add('hidden');
+
+          if (versions.length === 0) {
+            historyEmpty.classList.remove('hidden');
+            return;
+          }
+
+          historyList.classList.remove('hidden');
+
+          const formatDate = (isoString) => {
+            if (!isoString) return '--';
+            const d = new Date(isoString);
+            return `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}/${d.getFullYear()} ${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
+          };
+
+          const canManage = isUserAuthorizedForFile(f, 'manage');
+
+          historyList.innerHTML = versions.map((ver, idx) => {
+            const isLatest = idx === 0;
+            const stateLabels = { EN_PROGRESO: 'En Progreso', COMPARTIDO: 'Compartido', PUBLICADO: 'Publicado' };
+            const stateLabel = stateLabels[ver.status] || ver.status;
+
+            let stateBadgeClass = 'bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300';
+            if (ver.status === 'COMPARTIDO') stateBadgeClass = 'bg-blue-100 text-blue-800 dark:bg-blue-950/60 dark:text-blue-300';
+            else if (ver.status === 'PUBLICADO') stateBadgeClass = 'bg-green-100 text-green-800 dark:bg-green-950/60 dark:text-green-300';
+
+            const verJsonStr = encodeURIComponent(JSON.stringify({
+              versionId: ver.versionId,
+              backupFileId: ver.backupFileId || ver.fileId,
+              filename: ver.filename,
+              version: ver.version,
+              status: f.status || ver.status,
+              originalFileId: f.originalFileId || f.fileId,
+              type: f.type || '',
+              folder: f.folder,
+              changedByEmail: f.changedByEmail || ver.createdByEmail || '',
+              deliveryTeams: f.deliveryTeams || []
+            }));
+
+            const downloadUrl = `https://drive.google.com/uc?export=download&id=${ver.backupFileId || ver.fileId}`;
+
+            return `
+              <div class="p-4 rounded-xl border border-slate-200 dark:border-slate-800 bg-white/60 dark:bg-slate-900/60 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div class="flex items-start gap-3">
+                  <div class="flex flex-col items-center">
+                    <span class="px-2.5 py-1 rounded-lg bg-indigo-100 dark:bg-indigo-950/80 text-indigo-700 dark:text-indigo-300 font-mono font-bold text-xs">
+                      ${ver.version || 'v1.0'}
+                    </span>
+                    ${isLatest ? '<span class="text-[9px] font-bold text-green-600 dark:text-green-400 mt-1 uppercase tracking-wider">Actual</span>' : ''}
+                  </div>
+                  <div>
+                    <div class="flex items-center gap-2">
+                      <span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-semibold ${stateBadgeClass}">${stateLabel}</span>
+                      <span class="text-xs text-slate-400 font-medium">${formatDate(ver.fecha)}</span>
+                    </div>
+                    <p class="text-xs font-semibold text-slate-800 dark:text-slate-200 mt-1">${ver.comments || 'Sin comentarios registrados.'}</p>
+                    <p class="text-[10px] text-slate-400 mt-0.5">Por: ${ver.createdBy || 'CDE NORA'} ${ver.createdByEmail ? `(${ver.createdByEmail})` : ''}</p>
+                  </div>
+                </div>
+
+                <div class="flex items-center gap-2 self-end sm:self-center shrink-0">
+                  <a href="${downloadUrl}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 font-semibold text-xs transition-colors" title="Descargar archivo de esta versión">
+                    <span class="material-symbols-outlined text-[14px]">download</span> Descargar
+                  </a>
+                  ${(!isLatest && canManage) ? `
+                    <button onclick="window.restoreVersionItem(this, '${verJsonStr}')" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs transition-colors" title="Restablecer como versión activa">
+                      <span class="material-symbols-outlined text-[14px]">restore</span> Restablecer
+                    </button>
+                  ` : ''}
+                </div>
+              </div>
+            `;
+          }).join('');
+
+        } catch(err) {
+          console.error(err);
+          historyLoading.classList.add('hidden');
+          historyEmpty.classList.remove('hidden');
+        }
+      };
+
+      window.restoreVersionItem = async (btn, encodedData) => {
+        let v;
+        try { v = JSON.parse(decodeURIComponent(encodedData)); } catch(e) { return; }
+        if (!v || !activeProject) return;
+
+        if (!isUserAuthorizedForFile(v, 'manage')) {
+          alert('No tienes autorización para realizar esta acción sobre este archivo.');
+          return;
+        }
+
+        if (!confirm(`¿Deseas restablecer la versión ${v.version} de "${v.filename}" como la versión activa actual?\nSe creará un registro de restauración.`)) {
+          return;
+        }
+
+        const origHtml = btn.innerHTML;
+        btn.disabled = true;
+        btn.innerHTML = `<span class="inline-block w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>`;
+
+        try {
+          const ds = activeProject.dataSources || {};
+          const scriptUrl = ds.driveScriptUrl || DEFAULT_DRIVE_SCRIPT_URL;
+
+          const payload = {
+            action: 'restoreVersion',
+            backupFileId: v.backupFileId,
+            filename: v.filename,
+            version: v.version,
+            project: activeProject.slug || slugify(activeProject.name),
+            status: v.status || 'EN_PROGRESO',
+            originalFileId: v.originalFileId,
+            type: v.type || '',
+            folderId: ds.driveFolderId || '',
+            driveFolderName: ds.driveFolderName || activeProject.name,
+            changedBy: userAccount ? (userAccount.name || '') : '',
+            changedByEmail: userAccount ? (userAccount.email || userAccount.username || '') : '',
+            deliveryTeams: v.deliveryTeams || resolveCurrentUserDeliveryTeams()
+          };
+
+          const res = await fetch(scriptUrl, {
+            method: 'POST',
+            mode: 'cors',
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: JSON.stringify(payload)
+          });
+
+          if (!res.ok) throw new Error(`Error del servidor: ${res.statusText}`);
+          const data = await res.json();
+          if (data.status === 'error') throw new Error(data.message || 'Error al restaurar');
+
+          addLog(`[RESTAURACIÓN] ${v.filename} restablecido a partir de versión ${v.version}`);
+          modalVersionHistory.classList.add('hidden');
+          await loadProjectFiles();
+          alert(`Versión ${v.version} restablecida con éxito.`);
+        } catch(err) {
+          console.error(err);
+          alert(`Error al restablecer: ${err.message}`);
+          btn.disabled = false;
+          btn.innerHTML = origHtml;
+        }
+      };
+
+      const closeHistoryModal = () => {
+        modalVersionHistory.classList.add('hidden');
+      };
+      btnCloseHistoryModal.addEventListener('click', closeHistoryModal);
+      btnDoneHistoryModal.addEventListener('click', closeHistoryModal);
+
+      window.promoteFile = async (btn, encodedData, newStatus) => {
+        let f;
+        try { f = JSON.parse(decodeURIComponent(encodedData)); } catch(e) { return; }
+        if (!f || !activeProject) return;
+
+        if (!isUserAuthorizedForFile(f, 'manage')) {
+          alert('No tienes autorización para realizar esta acción sobre este archivo.');
+          return;
+        }
+
+        const labels = { COMPARTIDO: 'Compartido', PUBLICADO: 'Publicado' };
+        if (!confirm(`¿Mover "${f.name}" a ${labels[newStatus]}?\nEsto creará una copia del archivo en ese estado.`)) return;
+
+        const origHtml = btn.innerHTML;
+        btn.disabled = true;
+        btn.innerHTML = `<span class="inline-block w-3.5 h-3.5 border-2 border-current border-t-transparent rounded-full animate-spin"></span>`;
+
+        try {
+          const ds = activeProject.dataSources || {};
+          const scriptUrl = ds.driveScriptUrl || DEFAULT_DRIVE_SCRIPT_URL;
+          const payload = {
+            action: 'changeFileStatus',
+            fileId: f.fileId || f.originalFileId,
+            jsonId: f.jsonId || '',
+            filename: f.name,
+            newStatus: newStatus,
+            project: activeProject.slug || slugify(activeProject.name),
+            folderId: ds.driveFolderId || '',
+            driveFolderName: ds.driveFolderName || activeProject.name,
+            originalFileId: f.originalFileId || f.fileId,
+            type: f.type || '',
+            version: f.version || 'v1.0',
+            comments: `Promovido a ${labels[newStatus]}`,
+            changedBy: userAccount ? (userAccount.name || '') : '',
+            changedByEmail: userAccount ? (userAccount.email || userAccount.username || '') : '',
+            deliveryTeams: f.deliveryTeams || resolveCurrentUserDeliveryTeams()
+          };
+          const res = await fetch(scriptUrl, {
+            method: 'POST', mode: 'cors',
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: JSON.stringify(payload)
+          });
+          if (!res.ok) throw new Error(`Error del servidor: ${res.statusText}`);
+          const data = await res.json();
+          if (data.status === 'error') throw new Error(data.message || 'Error al cambiar estado');
+
+          addLog(`[${f.name}] → ${labels[newStatus]} por ${data.changedBy || (userAccount ? userAccount.name : 'usuario')}.`);
+          await loadProjectFiles();
+        } catch(err) {
+          console.error(err);
+          alert(`No se pudo cambiar el estado: ${err.message}`);
+          btn.disabled = false;
+          btn.innerHTML = origHtml;
+        }
+      };
+
+      window.deleteProjectFile = async (btn, encodedData) => {
+        let f;
+        try {
+          f = JSON.parse(decodeURIComponent(encodedData));
+        } catch (e) {
+          console.error(e);
+          return;
+        }
+
+        if (!f || !activeProject) return;
+
+        if (!isUserAuthorizedForFile(f, 'manage')) {
+          alert('No tienes autorización para realizar esta acción sobre este archivo.');
+          return;
+        }
+
+        const isModel = f.type === 'model';
+        const fileDesc = isModel && f.jsonId ? `"${f.name}" y sus datos asociados (.json)` : `"${f.name}"`;
+
+        if (!confirm(`¿Estás seguro de que deseas eliminar ${fileDesc} de Google Drive?`)) {
+          return;
+        }
+
+        const originalBtnHtml = btn.innerHTML;
+        btn.disabled = true;
+        btn.innerHTML = `<span class="inline-block w-4 h-4 border-2 border-red-500 border-t-transparent rounded-full animate-spin"></span>`;
+
+        try {
+          const ds = activeProject.dataSources || {};
+          const scriptUrl = ds.driveScriptUrl || DEFAULT_DRIVE_SCRIPT_URL;
+
+          const fileIds = [f.fileId, f.originalFileId, f.jsonId].filter(Boolean);
+          const uniqueFileIds = [...new Set(fileIds)];
+
+          const payload = {
+            action: 'deleteFiles',
+            fileIds: uniqueFileIds,
+            folderId: ds.driveFolderId || '',
+            driveFolderName: ds.driveFolderName || activeProject.name,
+            project: activeProject.slug || slugify(activeProject.name),
+            filename: f.name
+          };
+
+          const res = await fetch(scriptUrl, {
+            method: 'POST',
+            mode: 'cors',
+            headers: {
+              'Content-Type': 'text/plain;charset=utf-8'
+            },
+            body: JSON.stringify(payload)
+          });
+
+          if (!res.ok) {
+            throw new Error(`Error en el servidor: ${res.statusText}`);
+          }
+
+          const data = await res.json();
+          if (data.status === 'error') {
+            throw new Error(data.message || 'Error al eliminar');
+          }
+
+          addLog(`[ELIMINADO] ${fileDesc} eliminado correctamente.`);
+          await loadProjectFiles();
+        } catch (err) {
+          console.error(err);
+          alert(`No se pudo eliminar el archivo: ${err.message}`);
+          btn.disabled = false;
+          btn.innerHTML = originalBtnHtml;
+        }
+      };
+
+      // State tabs switcher
+      function switchStatusTab(tab, activeBtn) {
+        currentStatusTab = tab;
+        [stabProgreso, stabCompartido, stabPublicado].forEach(b => {
+          b.classList.remove('border-amber-500','text-amber-600','dark:text-amber-400','border-blue-500','text-blue-600','dark:text-blue-400','border-green-500','text-green-600','dark:text-green-400');
+          b.classList.add('border-transparent','text-slate-500','dark:text-slate-400');
+        });
+        if (tab === 'EN_PROGRESO') activeBtn.classList.add('border-amber-500','text-amber-600','dark:text-amber-400');
+        else if (tab === 'COMPARTIDO') activeBtn.classList.add('border-blue-500','text-blue-600','dark:text-blue-400');
+        else activeBtn.classList.add('border-green-500','text-green-600','dark:text-green-400');
+        activeBtn.classList.remove('border-transparent','text-slate-500','dark:text-slate-400');
+        renderDriveFilesTable();
+      }
+
+      // Sub-type tabs switcher
+      function switchStatusSubTab(subTab, activeBtn) {
+        currentStatusSubTab = subTab;
+        [sstabModels, sstabPdfs, sstabDwgs].forEach(b => {
+          b.classList.remove('border-blue-600','text-blue-600','dark:text-blue-400');
+          b.classList.add('border-transparent','text-slate-400');
+        });
+        activeBtn.classList.add('border-blue-600','text-blue-600','dark:text-blue-400');
+        activeBtn.classList.remove('border-transparent','text-slate-400');
+        renderDriveFilesTable();
+      }
+
+      stabProgreso.addEventListener('click', () => switchStatusTab('EN_PROGRESO', stabProgreso));
+      stabCompartido.addEventListener('click', () => switchStatusTab('COMPARTIDO', stabCompartido));
+      stabPublicado.addEventListener('click', () => switchStatusTab('PUBLICADO', stabPublicado));
+
+      sstabModels.addEventListener('click', () => switchStatusSubTab('models', sstabModels));
+      sstabPdfs.addEventListener('click', () => switchStatusSubTab('pdfs', sstabPdfs));
+      sstabDwgs.addEventListener('click', () => switchStatusSubTab('dwgs', sstabDwgs));
+
+      refreshListBtn.addEventListener('click', loadProjectFiles);
+      filesSearch.addEventListener('input', renderDriveFilesTable);
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,6 @@
+{
+  "name": "Blank App",
+  "description": "Una aplicación completamente en blanco lista para usar.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

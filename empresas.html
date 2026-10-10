@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <script>
+        if (!sessionStorage.getItem('userAccount') && !localStorage.getItem('userAccount')) {
+            window.location.replace('https://norabim.com/inse.html');
+        }
+    </script>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>Selección de Empresa | nora CDE</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#171717",
+                        "background-light": "#F2F2F2",
+                        "background-dark": "#171717",
+                        "text-light": "#111827",
+                        "text-dark": "#F3F4F6",
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Inter', 'sans-serif'] // We use Inter for a clean, premium look
+                    },
+                },
+            },
+        };
+    </script>
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
+    <link rel="icon" href="https://i.postimg.cc/W3trgjZX/FAVICON-NORA-NEGRO.png" type="image/png">
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F4F4F4;
+            color: #111;
+        }
+
+        /* Tailwind's dark utilities need a concrete base for the page itself. */
+        html.dark body {
+            background-color: #171717;
+            color: #F3F4F6;
+        }
+
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        /* Hide scrollbar for Chrome, Safari and Opera */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        /* Hide scrollbar for IE, Edge and Firefox */
+        .no-scrollbar {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
+
+        /* The custom cursor "DRAG" */
+        #custom-cursor {
+            pointer-events: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 70px;
+            height: 70px;
+            background-color: rgba(220, 220, 220, 0.8);
+            backdrop-filter: blur(4px);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            transform: translate(-50%, -50%);
+            z-index: 9999;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            mix-blend-mode: multiply;
+        }
+
+        .card-hover:hover {
+            transform: scale(0.98);
+        }
+        
+        .card-image-wrapper {
+            transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+        
+        .card-hover:hover .card-image-wrapper {
+            transform: scale(1.05);
+        }
+    </style>
+
+    
+</head>
+
+<body class="min-h-screen w-full flex flex-col relative">
+
+    
+
+    <!-- Header -->
+    <header class="absolute top-0 left-0 w-full z-10 px-8 py-4">
+        <div class="container mx-auto flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <button id="back-btn" aria-label="Volver"
+                    class="rounded-lg border border-border-light bg-white/80 px-2 py-1 hover:bg-white transition-colors">
+                    <span class="material-symbols-outlined text-[16px]">arrow_back</span>
+                </button>
+            </div>
+            <div class="flex items-center space-x-4">
+                <button id="theme-toggle" aria-label="Cambiar tema"
+                    class="text-text-light dark:text-white hover:text-primary"><span
+                        class="material-symbols-outlined text-[16px]">dark_mode</span></button>
+                <div id="auth-container" class="flex items-center space-x-4"><a
+                        href="https://norabim.com/inse.html"
+                        class="text-text-light dark:text-white hover:text-primary text-xs font-medium uppercase tracking-wider">Iniciar
+                        sesión</a></div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-1 flex flex-col justify-start w-full relative z-0">
+        <!-- Banner Identico a home.html -->
+        <section class="relative flex h-[270px] pt-14 overflow-hidden w-full">
+            <!-- Panel Izquierdo (30%) con color sólido y logo -->
+            <div class="w-[30%] bg-[#f6f6f6] dark:bg-background-dark h-full flex items-center justify-center p-8">
+                <div class="block w-full max-w-[160px]">
+                    <img id="portal-logo-light" alt="nora CDE" class="w-full h-auto object-contain dark:hidden"
+                        src="https://i.postimg.cc/tR3YSryT/LOGO-NORA-NEGRO.png" />
+                    <img id="portal-logo-dark" alt="nora CDE" class="w-full h-auto object-contain hidden dark:block"
+                        src="https://i.postimg.cc/SQ6JTZqj/LOGO-NORA-BLANCO.png" />
+                </div>
+            </div>
+            <!-- Panel Derecho (70%) con imagen -->
+            <div id="home-hero-image" class="w-[70%] h-full bg-cover bg-center"
+                style="background-image: url('https://i.postimg.cc/hPxkssjB/a876e83e4696eea7592b3fef6c8275a8.jpg');">
+            </div>
+        </section>
+
+        <!-- Container principal inferior -->
+        <div class="px-8 flex-1 flex flex-col justify-start py-8">
+        
+        <!-- Top Section: Title & Description -->
+        <div class="flex flex-col md:flex-row justify-between items-end mb-8 w-full max-w-[95%] mx-auto gap-4">
+            <div class="flex items-start">
+                <h1 class="text-6xl md:text-8xl font-medium tracking-tighter leading-none" style="letter-spacing: -0.04em;">EMPRESAS</h1>
+                <span id="company-count" class="text-lg font-medium ml-4 mt-2">(0)</span>
+            </div>
+            <div class="hidden md:block max-w-sm text-right">
+                <p class="text-sm font-medium leading-tight text-gray-600 mb-3">
+                    Plataforma centralizada.<br>
+                    Seleccione su espacio de trabajo corporativo para acceder a sus proyectos.
+                </p>
+                <a id="super-admin-link" href="super-admin.html" class="hidden inline-flex items-center gap-2 rounded-xl bg-primary px-4 py-2 text-xs font-semibold uppercase tracking-wider text-white hover:bg-black transition-colors">
+                    <span class="material-symbols-outlined text-[16px]">settings</span>
+                    Configuración Global
+                </a>
+            </div>
+        </div>
+
+        <!-- Horizontal Scroll Section -->
+        <div id="scroll-container" class="w-full max-w-[95%] mx-auto pb-8">
+            <div id="companies-list" class="flex flex-wrap justify-start gap-8 lg:gap-12 px-4">
+                <!-- Tarjetas inyectadas por JS -->
+            </div>
+        </div>
+        </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white dark:bg-background-dark py-8 px-8 mt-auto border-t border-border-light dark:border-gray-800">
+        <div class="container mx-auto text-center text-gray-500 dark:text-gray-400">
+            <div class="flex items-center justify-center gap-4 mb-4">
+                <!-- Logo para modo claro -->
+                <img id="portal-footer-logo-light" alt="nora CDE logo" class="h-40 dark:hidden object-contain"
+                    src="https://i.postimg.cc/tR3YSryT/LOGO-NORA-NEGRO.png" />
+                <!-- Logo para modo oscuro -->
+                <img id="portal-footer-logo-dark" alt="nora CDE logo" class="h-40 hidden dark:block object-contain"
+                    src="https://i.postimg.cc/SQ6JTZqj/LOGO-NORA-BLANCO.png" />
+            </div>
+            <p class="text-sm" id="portal-footer-text">© 2026 nora CDE - Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            // --- GESTIÓN DEL TEMA (MODO OSCURO/CLARO) ---
+            const themeToggle = document.getElementById('theme-toggle');
+            const htmlEl = document.documentElement;
+
+            const applyTheme = (theme) => {
+                if (theme === 'dark') {
+                    htmlEl.classList.add('dark');
+                    if (themeToggle) themeToggle.querySelector('.material-symbols-outlined').textContent = 'light_mode';
+                } else {
+                    htmlEl.classList.remove('dark');
+                    if (themeToggle) themeToggle.querySelector('.material-symbols-outlined').textContent = 'dark_mode';
+                }
+            };
+
+            const savedTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            applyTheme(savedTheme);
+
+            if (themeToggle) {
+                themeToggle.addEventListener('click', () => {
+                    const newTheme = htmlEl.classList.contains('dark') ? 'light' : 'dark';
+                    localStorage.setItem('theme', newTheme);
+                    applyTheme(newTheme);
+                });
+            }
+
+            const container = document.getElementById('scroll-container');
+            const list = document.getElementById('companies-list');
+            const countEl = document.getElementById('company-count');
+            const authContainer = document.getElementById('auth-container');
+            const superAdminLink = document.getElementById('super-admin-link');
+
+            let userAccount = null;
+            try {
+                userAccount = JSON.parse(sessionStorage.getItem('userAccount') || localStorage.getItem('userAccount'));
+            } catch(e) {
+                console.error('Error parsing user account:', e);
+            }
+
+            try {
+                const url = 'https://script.google.com/macros/s/AKfycbx2RAQx_8K4o22xE0Mw-ETc7K_58vIoi6-PgVi64u80inuiw144ks3cgWSdCtXqIgB02g/exec';
+
+                // Fetch ALL companies and users concurrently in real-time
+                const [compRes, userRes, staticEmpRes] = await Promise.all([
+                    fetch(url + '?action=getCompanies&t=' + Date.now()),
+                    fetch(url + '?t=' + Date.now()),
+                    fetch('empresas.json?t=' + Date.now())
+                ]);
+                
+                let allCompanies = await compRes.json();
+                let users = await userRes.json();
+                let staticEmpresas = [];
+                
+                try {
+                    if (staticEmpRes.ok) {
+                        staticEmpresas = await staticEmpRes.json();
+                    } else {
+                        const rawRes = await fetch('https://raw.githubusercontent.com/camilomartg-svg/bim/main/empresas.json?t=' + Date.now());
+                        if (rawRes.ok) staticEmpresas = await rawRes.json();
+                    }
+                } catch(e) { 
+                    console.warn('Could not merge static empresas', e); 
+                }
+
+                // Normalize text helper
+                const cleanText = (str) => {
+                    if (!str) return '';
+                    return str.toLowerCase()
+                              .normalize("NFD")
+                              .replace(/[\u0300-\u036f]/g, "")
+                              .replace(/[^a-z0-9]/g, "")
+                              .trim();
+                };
+
+                // Merge static empresas into allCompanies
+                const mergedCompaniesMap = new Map();
+
+                // 1. Add static empresas first (contains rich members & admin configuration from Super Admin)
+                if (Array.isArray(staticEmpresas)) {
+                    staticEmpresas.forEach(se => {
+                        if (se.deleted) return;
+                        mergedCompaniesMap.set(se.id, {
+                            id: se.id,
+                            name: se.name,
+                            code: se.code || (se.name ? se.name.substring(0,3).toUpperCase() : 'BIM'),
+                            location: se.location || se.city || 'Sede Principal',
+                            image: se.image || 'https://i.postimg.cc/02mTnnQv/21bd5ee9d2351270615280386caad1f3.jpg',
+                            configUrl: se.configUrl || `config-${se.id}.json`,
+                            admins: se.admins || [],
+                            members: se.members || []
+                        });
+                    });
+                }
+
+                // 2. Merge Google Sheets companies
+                if (Array.isArray(allCompanies)) {
+                    allCompanies.forEach(c => {
+                        if (!c.name) return;
+                        const cNameClean = cleanText(c.name);
+                        const cRazonClean = cleanText(c.razonSocial);
+                        const adminEmail = c.email ? c.email.toLowerCase().trim() : '';
+
+                        // Find matching static empresa by id or name
+                        let foundKey = null;
+                        for (const [key, existing] of mergedCompaniesMap.entries()) {
+                            if (existing.id === c.id || cleanText(existing.name) === cNameClean || (cRazonClean && cleanText(existing.name) === cRazonClean)) {
+                                foundKey = key;
+                                break;
+                            }
+                        }
+
+                        if (foundKey) {
+                            const existing = mergedCompaniesMap.get(foundKey);
+                            if (adminEmail && !existing.admins.some(a => a.toLowerCase().trim() === adminEmail)) {
+                                existing.admins.push(adminEmail);
+                            }
+                            mergedCompaniesMap.set(foundKey, {
+                                ...existing,
+                                location: c.city ? `${c.city}, ${c.country || 'Colombia'}` : existing.location,
+                                image: existing.image || c.image || c.logoBase64 || 'https://i.postimg.cc/02mTnnQv/21bd5ee9d2351270615280386caad1f3.jpg'
+                            });
+                        } else {
+                            const id = c.id || 'company-' + Date.now();
+                            const initialAdmins = adminEmail ? [adminEmail] : [];
+                            const initialMembers = adminEmail ? [{
+                                name: adminEmail.split('@')[0],
+                                email: adminEmail,
+                                role: 'ADMINISTRADOR_EMPRESA',
+                                empresaUsuario: c.name || c.legalName,
+                                cargo: 'Administrador de Empresa'
+                            }] : [];
+
+                            mergedCompaniesMap.set(id, {
+                                id: id,
+                                name: c.name || c.legalName,
+                                code: c.code || (c.name ? c.name.substring(0,3).toUpperCase() : 'BIM'),
+                                location: c.city ? `${c.city}, ${c.country || 'Colombia'}` : 'Sede Principal',
+                                image: c.image || c.logoBase64 || 'https://i.postimg.cc/02mTnnQv/21bd5ee9d2351270615280386caad1f3.jpg',
+                                configUrl: c.configUrl || `config-${id}.json`,
+                                admins: initialAdmins,
+                                members: initialMembers
+                            });
+                        }
+                    });
+                }
+
+                // 3. Enrich companies with users registered in Google Sheets
+                if (Array.isArray(users)) {
+                    users.forEach(u => {
+                        if (!u.email || !u.empresa) return;
+                        const uEmailClean = u.email.toLowerCase().trim();
+                        const uEmpClean = cleanText(u.empresa);
+
+                        for (const [key, comp] of mergedCompaniesMap.entries()) {
+                            if (cleanText(comp.name) === uEmpClean || cleanText(comp.razonSocial) === uEmpClean) {
+                                if (u.rol === 'ADMINISTRADOR_EMPRESA') {
+                                    if (!comp.admins.some(a => a.toLowerCase().trim() === uEmailClean)) {
+                                        comp.admins.push(uEmailClean);
+                                    }
+                                }
+                                const mIdx = comp.members.findIndex(m => m.email && m.email.toLowerCase().trim() === uEmailClean);
+                                const memberObj = {
+                                    name: u.nombre || uEmailClean.split('@')[0],
+                                    email: uEmailClean,
+                                    role: u.rol || 'INVITADO',
+                                    empresaUsuario: u.empresa,
+                                    cargo: u.cargo || (u.rol === 'ADMINISTRADOR_EMPRESA' ? 'Administrador de Empresa' : '')
+                                };
+                                if (mIdx > -1) {
+                                    comp.members[mIdx] = { ...comp.members[mIdx], ...memberObj };
+                                } else {
+                                    comp.members.push(memberObj);
+                                }
+                            }
+                        }
+                    });
+                }
+
+                const consolidatedCompanies = Array.from(mergedCompaniesMap.values());
+
+                // Validate and update User
+                let userEmail = '';
+                if (userAccount && userAccount.username) {
+                    userEmail = userAccount.username.toLowerCase().trim();
+                    if (userAccount.role === 'SUPER_ADMINISTRADOR' || userEmail === 'imagina3ddesign@gmail.com') {
+                        // Bypass validation for super administrators
+                    } else {
+                        const userEntries = users.filter(u => u.email && u.email.toLowerCase().trim() === userEmail);
+
+                        // Block only if the user truly doesn't exist in the DB
+                        if (userEntries.length === 0) {
+                            alert('Tu acceso ha sido revocado o está pendiente. Cerrando sesión.');
+                            sessionStorage.removeItem('userAccount');
+                            localStorage.removeItem('userAccount');
+                            window.location.replace('https://norabim.com/inse.html');
+                            return;
+                        }
+
+                        // Find any approved entry - USE REVERSE TO GET NEWEST
+                        const activeEntry = userEntries.reverse().find(u => {
+                            const dbEstado = u.estado ? u.estado.toUpperCase().trim() : '';
+                            const dbRol = u.rol ? u.rol.toUpperCase().trim() : '';
+                            return dbEstado === 'APROBADO' || dbRol === 'SUPER_ADMINISTRADOR' || dbRol === 'ADMINISTRADOR_EMPRESA' || dbRol === 'MIEMBRO';
+                        });
+
+                        if (!activeEntry) {
+                            const anyPending = userEntries.some(u => (u.estado || '').toUpperCase().trim() === 'PENDIENTE');
+                            const msg = anyPending
+                                ? 'Tu solicitud de acceso está pendiente de aprobación.'
+                                : 'Tu acceso ha sido revocado. Contacta al administrador.';
+                            alert(msg);
+                            sessionStorage.removeItem('userAccount');
+                            localStorage.removeItem('userAccount');
+                            window.location.replace('https://norabim.com/inse.html');
+                            return;
+                        }
+
+                        // User is approved — update cache with freshest role/empresa/name
+                        userAccount.role = activeEntry.rol;
+                        userAccount.empresa = activeEntry.empresa || '';
+                        if (activeEntry.nombre && activeEntry.nombre.trim() !== '') {
+                            userAccount.name = activeEntry.nombre.trim();
+                        }
+                        const cacheLocation = localStorage.getItem('userAccount') ? 'localStorage' : 'sessionStorage';
+                        window[cacheLocation].setItem('userAccount', JSON.stringify(userAccount));
+                    }
+                }
+
+                // Render Auth UI
+                if (userAccount) {
+                    authContainer.innerHTML = `
+                    <a href="perfil.html" class="flex items-center gap-1 hover:underline text-[10px] uppercase tracking-wider font-medium text-text-light dark:text-white" title="Ver mi perfil">
+                        <span class="material-symbols-outlined text-[14px]">account_circle</span>
+                        <span>Hola, ${userAccount.name.split(' ')[0]}</span>
+                    </a>
+                    <button id="logout-button" class="text-text-light dark:text-white hover:text-primary text-[10px] uppercase tracking-wider font-medium">Cerrar sesión</button>
+                    `;
+                    document.getElementById('logout-button').addEventListener('click', () => {
+                        sessionStorage.removeItem('userAccount');
+                        localStorage.removeItem('userAccount');
+                        window.location.reload();
+                    });
+                }
+
+                // Pre-check project configs to discover project-level invitations
+                const projectAccessCompanyIds = new Set();
+                if (userEmail && userAccount && userAccount.role !== 'SUPER_ADMINISTRADOR') {
+                    await Promise.allSettled(
+                        consolidatedCompanies.filter(c => c.configUrl).map(async c => {
+                            try {
+                                const res = await fetch(`${c.configUrl}?t=${Date.now()}`);
+                                if (res.ok) {
+                                    const conf = await res.json();
+                                    const hasProject = Array.isArray(conf.projects) && conf.projects.some(p =>
+                                        Array.isArray(p.members) && p.members.some(pm => pm.toLowerCase().trim() === userEmail)
+                                    );
+                                    if (hasProject) {
+                                        projectAccessCompanyIds.add(c.id);
+                                    }
+                                }
+                            } catch(err) {}
+                        })
+                    );
+                }
+
+                // Helper to render individual company card
+                const renderCard = (c, isGuest = false) => {
+                    const isAdminOfCompany = (Array.isArray(c.admins) && c.admins.some(a => a.toLowerCase().trim() === userEmail)) ||
+                                            (c.email && c.email.toLowerCase().trim() === userEmail) ||
+                                            (Array.isArray(c.members) && c.members.some(m => m.email && m.email.toLowerCase().trim() === userEmail && (m.role === 'ADMINISTRADOR_EMPRESA' || m.role === 'ADMINISTRADOR')));
+
+                    let badgeLabel = 'Miembro Corporativo';
+                    let badgeIcon = 'corporate_fare';
+                    let badgeColor = 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950/70 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800';
+                    let bottomBadgeColor = 'text-emerald-700 dark:text-emerald-300 border-emerald-100 dark:border-emerald-900';
+                    let bottomBadgeText = 'Miembro Corporativo';
+
+                    if (isGuest) {
+                        badgeLabel = 'Invitado';
+                        badgeIcon = 'badge';
+                        badgeColor = 'bg-indigo-100 text-indigo-800 dark:bg-indigo-950/70 dark:text-indigo-300 border-indigo-200 dark:border-indigo-800';
+                        bottomBadgeColor = 'text-indigo-700 dark:text-indigo-300 border-indigo-100 dark:border-indigo-900';
+                        bottomBadgeText = 'Acceso Invitado';
+                    } else if (isAdminOfCompany) {
+                        badgeLabel = 'Administrador';
+                        badgeIcon = 'admin_panel_settings';
+                        badgeColor = 'bg-blue-100 text-blue-800 dark:bg-blue-950/70 dark:text-blue-300 border-blue-200 dark:border-blue-800';
+                        bottomBadgeColor = 'text-blue-700 dark:text-blue-300 border-blue-100 dark:border-blue-900';
+                        bottomBadgeText = 'Administrador de Empresa';
+                    }
+
+                    return `
+                    <a href="home.html?empresa=${c.id}&v=${Date.now()}" class="card-hover flex-none w-[260px] md:w-[320px] lg:w-[360px] group transition-transform duration-500 block">
+                        <div class="flex justify-between items-end mb-4 border-b border-gray-300 dark:border-gray-700 pb-2">
+                            <div class="flex flex-col min-w-0 pr-2">
+                                <div class="flex items-center gap-2 mb-1">
+                                    <span class="text-[9px] font-bold text-gray-400 uppercase tracking-widest">${c.code || 'BIM'}</span>
+                                    <span class="text-[8px] font-black uppercase tracking-wider ${badgeColor} px-2 py-0.5 rounded-md border flex items-center gap-1">
+                                        <span class="material-symbols-outlined text-[10px]">${badgeIcon}</span>
+                                        ${badgeLabel}
+                                    </span>
+                                </div>
+                                <span class="text-xs font-bold uppercase tracking-wider text-gray-800 dark:text-gray-200 truncate">${c.name}</span>
+                            </div>
+                            <span class="text-[9px] font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-widest text-right flex-shrink-0">${c.location}</span>
+                        </div>
+                        <div class="w-full aspect-[4/5] bg-gray-200 dark:bg-gray-800 overflow-hidden relative rounded-xl shadow-sm group-hover:shadow-md transition-shadow">
+                            <div class="w-full h-full card-image-wrapper">
+                                <img src="${c.image}" alt="${c.name}" class="w-full h-full object-cover filter brightness-95 contrast-105" />
+                            </div>
+                            <div class="absolute bottom-3 left-3 bg-white/95 dark:bg-gray-900/95 backdrop-blur-md px-3 py-1.5 rounded-lg text-[9px] font-bold uppercase tracking-widest ${bottomBadgeColor} shadow-md flex items-center gap-1.5 border">
+                                <span class="material-symbols-outlined text-[14px]">${badgeIcon}</span>
+                                <span>${bottomBadgeText}</span>
+                            </div>
+                        </div>
+                    </a>
+                `;
+                };
+
+                if (userAccount && userAccount.role === 'SUPER_ADMINISTRADOR') {
+                    if (superAdminLink) superAdminLink.classList.remove('hidden');
+                    countEl.textContent = `(${consolidatedCompanies.length})`;
+
+                    list.innerHTML = `
+                        <div class="w-full flex flex-col gap-6">
+                            <div class="flex items-center gap-2 text-xs font-black uppercase tracking-wider text-gray-500">
+                                <span class="material-symbols-outlined text-[16px] text-primary">admin_panel_settings</span>
+                                <span>Todas las Empresas Registradas (Vista Super Administrador)</span>
+                            </div>
+                            <div class="flex flex-wrap justify-start gap-8 lg:gap-12">
+                                ${consolidatedCompanies.map(c => renderCard(c, false)).join('')}
+                            </div>
+                        </div>
+                    `;
+                    return;
+                }
+
+                // Segregate into Belonging ("Mi Empresa") vs Guest companies ("Empresas como Invitado")
+                // Guided strictly by Super Admin configuration (empresas.json & consolidatedCompanies)
+                const belongingCompanies = [];
+                const guestCompanies = [];
+
+                consolidatedCompanies.forEach(c => {
+                    const cNameClean = cleanText(c.name);
+                    const cRazonClean = cleanText(c.razonSocial);
+                    
+                    // 1. Is user an administrator of this company?
+                    const isAdminOfCompany = (Array.isArray(c.admins) && c.admins.some(a => a.toLowerCase().trim() === userEmail)) ||
+                                            (c.email && c.email.toLowerCase().trim() === userEmail);
+                    
+                    // 2. Is user an internal corporate employee of this company in Super Admin?
+                    // Internal corporate members must have role 'ADMINISTRADOR_EMPRESA', 'ADMINISTRADOR', or 'MIEMBRO' OR have empresaUsuario matching the company name AND role is not 'INVITADO'
+                    const isInternalMember = Array.isArray(c.members) && c.members.some(m => {
+                        if (!m.email || m.email.toLowerCase().trim() !== userEmail) return false;
+                        if (m.role === 'ADMINISTRADOR_EMPRESA' || m.role === 'ADMINISTRADOR' || m.role === 'MIEMBRO') return true;
+                        if (m.empresaUsuario && (cleanText(m.empresaUsuario) === cNameClean || (cRazonClean && cleanText(m.empresaUsuario) === cRazonClean)) && m.role !== 'INVITADO') return true;
+                        return false;
+                    });
+
+                    // 3. Is this company assigned to the user in their account / live DB as company admin or member?
+                    const isAssignedCompany = userAccount && userAccount.empresa && 
+                        (cleanText(userAccount.empresa) === cNameClean || (cRazonClean && cleanText(userAccount.empresa) === cRazonClean)) && 
+                        (userAccount.role === 'ADMINISTRADOR_EMPRESA' || userAccount.role === 'ADMINISTRADOR' || userAccount.role === 'MIEMBRO');
+
+                    if (isAdminOfCompany || isInternalMember || isAssignedCompany) {
+                        belongingCompanies.push(c);
+                    } else {
+                        // Check if user is an invited member / guest in this company
+                        const isExplicitGuestMember = Array.isArray(c.members) && c.members.some(m => 
+                            m.email && m.email.toLowerCase().trim() === userEmail
+                        );
+                        const hasProjectGuestAccess = projectAccessCompanyIds.has(c.id);
+
+                        if (isExplicitGuestMember || hasProjectGuestAccess) {
+                            guestCompanies.push(c);
+                        }
+                    }
+                });
+
+                const totalCount = belongingCompanies.length + guestCompanies.length;
+                countEl.textContent = `(${totalCount})`;
+
+                if (totalCount === 0) {
+                    list.innerHTML = `
+                        <div class="flex flex-col items-center justify-center w-full h-full text-center p-12 mx-auto" style="width: 100%;">
+                            <span class="material-symbols-outlined text-4xl text-gray-400 mb-4">domain_disabled</span>
+                            <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-2">Sin Empresas Asignadas</h3>
+                            <p class="text-sm text-gray-500 max-w-sm">Tu cuenta no tiene empresas asociadas ni invitaciones activas en este momento. Por favor contacta al administrador.</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                const leftSection = belongingCompanies.length > 0 ? `
+                    <div class="w-full" style="flex: 1 1 420px; min-width: 300px; max-width: 560px;">
+                        <div class="mb-5 flex flex-col gap-1">
+                            <div class="flex items-center gap-2">
+                                <span class="h-2.5 w-2.5 rounded-full bg-emerald-500 inline-block shadow-sm"></span>
+                                <h2 class="text-xs font-black tracking-widest uppercase text-gray-800 dark:text-gray-200">Mi Empresa</h2>
+                                <span class="text-[9px] font-bold bg-emerald-100 text-emerald-800 dark:bg-emerald-950/80 dark:text-emerald-300 px-2 py-0.5 rounded-full">Sede Principal</span>
+                            </div>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">Espacio de trabajo corporativo al que perteneces directamente.</p>
+                        </div>
+                        <div class="flex flex-wrap justify-start gap-8 lg:gap-12">
+                            ${belongingCompanies.map(c => renderCard(c, false)).join('')}
+                        </div>
+                    </div>
+                ` : '';
+
+                const rightSection = guestCompanies.length > 0 ? `
+                    <div class="w-full" style="flex: 1 1 620px; min-width: 300px; max-width: 980px;">
+                        <div class="mb-5 flex flex-col gap-1">
+                            <div class="flex items-center gap-2">
+                                <span class="h-2.5 w-2.5 rounded-full bg-indigo-500 inline-block shadow-sm"></span>
+                                <h2 class="text-xs font-black tracking-widest uppercase text-gray-800 dark:text-gray-200">Empresas como Invitado</h2>
+                                <span class="text-[9px] font-bold bg-indigo-100 text-indigo-800 dark:bg-indigo-950/80 dark:text-indigo-300 px-2 py-0.5 rounded-full">Colaboraciones Externas</span>
+                            </div>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">Organizaciones y proyectos donde has sido invitado a colaborar.</p>
+                        </div>
+                        <div class="flex flex-wrap justify-start gap-8 lg:gap-12">
+                            ${guestCompanies.map(c => renderCard(c, true)).join('')}
+                        </div>
+                    </div>
+                ` : '';
+
+                const html = `
+                    <div style="display: flex; flex-direction: row; gap: 2rem; align-items: flex-start; flex-wrap: nowrap; width: 100%; min-width: 0;">
+                        ${leftSection || ''}
+                        <div style="width: 1px; min-height: 100%; background: rgba(15, 23, 42, 0.12); align-self: stretch; margin: 0 0.5rem; opacity: 0.8;"></div>
+                        ${rightSection || ''}
+                    </div>
+                    <style>
+                        @media (max-width: 980px) {
+                            #companies-list > div {
+                                flex-direction: column !important;
+                                flex-wrap: wrap !important;
+                            }
+                            #companies-list > div > div[style*="width: 1px"] {
+                                display: none !important;
+                            }
+                        }
+                    </style>
+                `;
+                list.innerHTML = html;
+
+            } catch (e) {
+                console.error("Error loading companies list:", e);
+            }
+        });
+    </script>
+</body>
+
+</html>

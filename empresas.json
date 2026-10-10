@@ -1,0 +1,146 @@
+[
+  {
+    "id": "empresa-1786128422720",
+    "name": "Mesh Estudio",
+    "code": "MES",
+    "admins": [
+      "info@meshestudio.com",
+      "camilo.martinez@meshestudio.com"
+    ],
+    "zonaHoraria": "America/Bogota",
+    "members": [
+      {
+        "name": "info",
+        "email": "info@meshestudio.com",
+        "role": "ADMINISTRADOR_EMPRESA",
+        "empresaUsuario": "Mesh Estudio",
+        "especialidad": "",
+        "cargo": "Administrador de Empresa"
+      },
+      {
+        "name": "Camilo Martínez Guevara",
+        "email": "camilo.martinez@meshestudio.com",
+        "role": "ADMINISTRADOR_EMPRESA",
+        "empresaUsuario": "Mesh Estudio",
+        "especialidad": "",
+        "cargo": ""
+      },
+      {
+        "name": "Camilo Martinez",
+        "email": "camilomartg@gmail.com",
+        "role": "INVITADO",
+        "empresaUsuario": "HIDROSANITARIO SAS",
+        "cargo": "Diseñador Hidrosánitario"
+      },
+      {
+        "name": "Nuevo Usuario",
+        "email": "alc.spk.2@gmail.com",
+        "role": "MIEMBRO",
+        "empresaUsuario": "Mesh Estudio",
+        "cargo": "Modelador BIM"
+      },
+      {
+        "name": "Nuevo Usuario",
+        "email": "alc.spk.3@gmail.com",
+        "role": "INVITADO",
+        "empresaUsuario": "HIDROSANITARIO SAS",
+        "cargo": ""
+      },
+      {
+        "name": "Nuevo Usuario",
+        "email": "alc.spk.5@gmail.com",
+        "role": "INVITADO",
+        "empresaUsuario": "ELECTRICOS SAS",
+        "cargo": ""
+      },
+      {
+        "name": "Cuenta1",
+        "email": "alc.spk.1@gmail.com",
+        "role": "INVITADO",
+        "empresaUsuario": "ELECTRICOS SAS",
+        "cargo": ""
+      },
+      {
+        "name": "Director de Construcción",
+        "email": "ianeiara.oficial@gmail.com",
+        "role": "MIEMBRO",
+        "empresaUsuario": "Mesh Estudio",
+        "cargo": "",
+        "especialidad": ""
+      }
+    ],
+    "razonSocial": "Mesh Estudio SAS",
+    "terminosAceptados": true,
+    "tratamientoDatos": true,
+    "image": "https://i.postimg.cc/02mTnnQv/21bd5ee9d2351270615280386caad1f3.jpg",
+    "location": "Bogotá, Colombia",
+    "configUrl": "config-empresa-1786128422720.json",
+    "driveFolderId": "1tt4WfX9ehHQNKhV5PFrPn4NeJfInyOzh"
+  },
+  {
+    "id": "empresa-1786449580850",
+    "name": "HIDROSANITARIO SAS",
+    "code": "HID",
+    "admins": [
+      "camilomartg@gmail.com"
+    ],
+    "zonaHoraria": "America/Bogota",
+    "members": [
+      {
+        "name": "Camilo Martinez",
+        "email": "camilomartg@gmail.com",
+        "role": "ADMINISTRADOR_EMPRESA",
+        "empresaUsuario": "HIDROSANITARIO SAS",
+        "especialidad": "Hidrosanitaria y gas",
+        "cargo": "Administrador de Empresa"
+      },
+      {
+        "name": "Nuevo Usuario",
+        "email": "alc.spk.3@gmail.com",
+        "role": "MIEMBRO",
+        "empresaUsuario": "HIDROSANITARIO SAS",
+        "cargo": "Diseñador Hidrosánitario"
+      }
+    ],
+    "razonSocial": "HIDROSANITARIO SAS",
+    "terminosAceptados": true,
+    "tratamientoDatos": true,
+    "image": "https://i.postimg.cc/02mTnnQv/21bd5ee9d2351270615280386caad1f3.jpg",
+    "location": "Bogota DC, Colombia",
+    "configUrl": "config-empresa-1786449580850.json",
+    "driveFolderId": "1AkJIFF-alkZMPak4tc0X09ShmNyU44Qg"
+  },
+  {
+    "id": "empresa-1786449656145",
+    "name": "ELECTRICOS SAS",
+    "code": "ELE",
+    "admins": [
+      "alc.spk.1@gmail.com"
+    ],
+    "zonaHoraria": "America/Bogota",
+    "members": [
+      {
+        "name": "Cuenta1",
+        "email": "alc.spk.1@gmail.com",
+        "role": "ADMINISTRADOR_EMPRESA",
+        "empresaUsuario": "ELECTRICOS SAS",
+        "especialidad": "CCTV, Eléctrica, Obras industriales",
+        "cargo": "Administrador de Empresa"
+      },
+      {
+        "name": "Cuenta5",
+        "email": "alc.spk.5@gmail.com",
+        "role": "MIEMBRO",
+        "empresaUsuario": "ELECTRICOS SAS",
+        "cargo": "Diseñador Eléctrico"
+      }
+    ],
+    "razonSocial": "ELECTRICOS SAS",
+    "terminosAceptados": true,
+    "tratamientoDatos": true,
+    "image": "https://i.postimg.cc/02mTnnQv/21bd5ee9d2351270615280386caad1f3.jpg",
+    "location": "Bogota DC, Colombia",
+    "configUrl": "config-empresa-1786449656145.json",
+    "driveFolderId": "1cUyCKpXtGD_-b_EAcjJLYm6BdsLtHkIc"
+  }
+]

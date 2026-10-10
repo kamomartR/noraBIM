@@ -1,0 +1,392 @@
+{
+  "projects": [
+    {
+      "name": "UNUM",
+      "title": "NUEVO PROYECTO",
+      "slug": "nuevo-proyecto-1786128516688",
+      "status": "Planeacion",
+      "enabled": true,
+      "hasLicense": true,
+      "landing": {
+        "enabled": true,
+        "title": "NUEVO PROYECTO",
+        "map": {
+          "lat": 4.721939666142109,
+          "lng": -74.0567524732912,
+          "zoom": 15
+        },
+        "eyebrow": "nora",
+        "subtitle": "Accesos rápidos, seguimiento y contexto del proyecto.",
+        "actionEyebrow": "Panel",
+        "actionTitle": "Acciones",
+        "actionDescription": "Atajos para equipo, incidencias y gestión del proyecto.",
+        "logoUrl": "https://i.postimg.cc/J4Fy2Qsx/LOGO-(1).jpg",
+        "portalLogoLight": "https://i.postimg.cc/tR3YSryT/LOGO-NORA-NEGRO.png",
+        "portalLogoDark": "https://i.postimg.cc/SQ6JTZqj/LOGO-NORA-BLANCO.png",
+        "viewerLogoLight": "https://i.postimg.cc/tR3YSryT/LOGO-NORA-NEGRO.png",
+        "viewerLogoDark": "https://i.postimg.cc/SQ6JTZqj/LOGO-NORA-BLANCO.png"
+      },
+      "modules": {
+        "ifc": "VSR_IFCA/",
+        "status": "STATUS/",
+        "cantidades": "CANTIDADES/",
+        "pdf": "VSR_PDFA/",
+        "dwg": "VSR_DWGA/"
+      },
+      "actions": {
+        "publicaciones": "Publicaciones.html",
+        "solicitudes": "index.html",
+        "equipo": "equipo.html"
+      },
+      "dataSources": {
+        "driveFolderName": "UNUM",
+        "driveFolderId": "1dlGHSc_6SZBt72t2B_4lCTmYGWFv8VAW",
+        "driveScriptUrl": "",
+        "statusSheetId": "",
+        "statusScriptUrl": "",
+        "cantidadesSheetId": "",
+        "cantidadesScriptUrl": ""
+      },
+      "country": "Colombia",
+      "state": "Cundinamarca",
+      "city": "Bogotá",
+      "type": [
+        "Vivienda multifamiliar"
+      ],
+      "description": "Vivienda multifamiliar en la ciudad de Bogotá",
+      "client": "SONA",
+      "clientName": "SONA",
+      "clientType": "Propietario",
+      "members": [
+        "info@meshestudio.com",
+        "camilo.martinez@meshestudio.com",
+        "camilomartg@gmail.com",
+        "alc.spk.2@gmail.com",
+        "alc.spk.3@gmail.com",
+        "alc.spk.5@gmail.com",
+        "alc.spk.1@gmail.com",
+        "ianeiara.oficial@gmail.com"
+      ],
+      "equiposDeTarea": [
+        {
+          "name": "HIDROSANITÁRIO",
+          "members": [
+            "camilomartg@gmail.com",
+            "alc.spk.3@gmail.com"
+          ]
+        },
+        {
+          "name": "ARQUITECTURA",
+          "members": [
+            "info@meshestudio.com",
+            "camilo.martinez@meshestudio.com",
+            "alc.spk.2@gmail.com"
+          ]
+        },
+        {
+          "name": "ELÉCTRICO",
+          "members": [
+            "alc.spk.5@gmail.com",
+            "alc.spk.1@gmail.com"
+          ]
+        },
+        {
+          "name": "ESTRUCTURAL",
+          "members": [
+            "info@meshestudio.com"
+          ]
+        },
+        {
+          "name": "GAS",
+          "members": [
+            "info@meshestudio.com"
+          ]
+        },
+        {
+          "name": "HVAC",
+          "members": [
+            "info@meshestudio.com"
+          ]
+        },
+        {
+          "name": "ILUMINACIÓN",
+          "members": [
+            "info@meshestudio.com"
+          ]
+        },
+        {
+          "name": "URBANISMO",
+          "members": [
+            "info@meshestudio.com"
+          ]
+        }
+      ],
+      "iso19650": {
+        "projectAdmins": [
+          "alc.spk.2@gmail.com"
+        ],
+        "deliveryTeams": [
+          {
+            "id": "deliv-0-1786801216410",
+            "name": "HIDROSANITÁRIO",
+            "leadEmail": "camilomartg@gmail.com",
+            "description": "Equipo de entrega asignado a la producción de información.",
+            "members": [
+              "camilomartg@gmail.com",
+              "alc.spk.3@gmail.com"
+            ],
+            "taskTeams": []
+          },
+          {
+            "id": "deliv-1-1786801216410",
+            "name": "ARQUITECTURA",
+            "leadEmail": "info@meshestudio.com",
+            "description": "Equipo de entrega asignado a la producción de información.",
+            "members": [
+              "info@meshestudio.com",
+              "camilo.martinez@meshestudio.com",
+              "alc.spk.2@gmail.com"
+            ],
+            "taskTeams": []
+          },
+          {
+            "id": "deliv-2-1786801216410",
+            "name": "ELÉCTRICO",
+            "leadEmail": "alc.spk.5@gmail.com",
+            "description": "Equipo de entrega asignado a la producción de información.",
+            "members": [
+              "alc.spk.5@gmail.com",
+              "alc.spk.1@gmail.com"
+            ],
+            "taskTeams": []
+          },
+          {
+            "id": "deliv-1786887734230",
+            "name": "ESTRUCTURAL",
+            "leadEmail": "info@meshestudio.com",
+            "description": "",
+            "members": [
+              "info@meshestudio.com"
+            ],
+            "taskTeams": []
+          },
+          {
+            "id": "deliv-1786888421958",
+            "name": "GAS",
+            "leadEmail": "info@meshestudio.com",
+            "description": "",
+            "members": [
+              "info@meshestudio.com"
+            ],
+            "taskTeams": []
+          },
+          {
+            "id": "deliv-1786888434934",
+            "name": "HVAC",
+            "leadEmail": "info@meshestudio.com",
+            "description": "",
+            "members": [
+              "info@meshestudio.com"
+            ],
+            "taskTeams": []
+          },
+          {
+            "id": "deliv-1786888448094",
+            "name": "ILUMINACIÓN",
+            "leadEmail": "info@meshestudio.com",
+            "description": "",
+            "members": [
+              "info@meshestudio.com"
+            ],
+            "taskTeams": []
+          },
+          {
+            "id": "deliv-1786888453758",
+            "name": "URBANISMO",
+            "leadEmail": "info@meshestudio.com",
+            "description": "",
+            "members": [
+              "info@meshestudio.com"
+            ],
+            "taskTeams": []
+          }
+        ],
+        "receiverTeams": [
+          {
+            "id": "recv-1787434761208",
+            "name": "ADMINISTRACIÓN DE OBRA",
+            "leadEmail": "ianeiara.oficial@gmail.com",
+            "description": "",
+            "members": [
+              "ianeiara.oficial@gmail.com"
+            ]
+          }
+        ],
+        "directorDeObra": "ianeiara.oficial@gmail.com"
+      }
+    },
+    {
+      "name": "Proyecto tester",
+      "title": "NUEVO PROYECTO",
+      "slug": "nuevo-proyecto-1788144083264",
+      "status": "Planeacion",
+      "enabled": true,
+      "hasLicense": true,
+      "landing": {
+        "enabled": true,
+        "title": "NUEVO PROYECTO",
+        "map": {
+          "lat": 4.616935,
+          "lng": -74.081084,
+          "zoom": 18
+        },
+        "eyebrow": "nora",
+        "subtitle": "Accesos rápidos, seguimiento y contexto del proyecto.",
+        "actionEyebrow": "Panel",
+        "actionTitle": "Acciones",
+        "actionDescription": "Atajos para equipo, incidencias y gestión del proyecto.",
+        "logoUrl": "https://i.postimg.cc/J4Fy2Qsx/LOGO-(1).jpg",
+        "portalLogoLight": "https://i.postimg.cc/tR3YSryT/LOGO-NORA-NEGRO.png",
+        "portalLogoDark": "https://i.postimg.cc/SQ6JTZqj/LOGO-NORA-BLANCO.png",
+        "viewerLogoLight": "https://i.postimg.cc/L4r0gSvV/LOGO-TEXTO-NORA-NEGRO.png",
+        "viewerLogoDark": "https://i.postimg.cc/FFfBKzb8/LOGO-TEXTO-NORA-BLANCO.png"
+      },
+      "modules": {
+        "ifc": "VSR_IFCA/",
+        "status": "STATUS/",
+        "cantidades": "CANTIDADES/",
+        "pdf": "VSR_PDFA/",
+        "dwg": "VSR_DWGA/"
+      },
+      "actions": {
+        "publicaciones": "Publicaciones.html",
+        "solicitudes": "index.html",
+        "equipo": "equipo.html"
+      },
+      "dataSources": {
+        "driveFolderName": "Proyecto tester",
+        "driveFolderId": "1oQdufjqUgtA13zBSbtyKmJSO4SR1k8mT",
+        "driveScriptUrl": "",
+        "statusSheetId": "",
+        "statusScriptUrl": "",
+        "cantidadesSheetId": "",
+        "cantidadesScriptUrl": ""
+      },
+      "customTrialExpiry": "2026-10-01T04:59:59.999Z",
+      "customTrialUnit": "months",
+      "customTrialValue": 1,
+      "members": [],
+      "equiposDeTarea": []
+    },
+    {
+      "name": "Hospital Materno Infantil",
+      "title": "NUEVO PROYECTO",
+      "slug": "nuevo-proyecto-1788356587555",
+      "status": "Activo",
+      "enabled": true,
+      "hasLicense": true,
+      "landing": {
+        "enabled": true,
+        "title": "NUEVO PROYECTO",
+        "map": {
+          "lat": 4.588603698911413,
+          "lng": -74.08492359113588,
+          "zoom": 18
+        },
+        "eyebrow": "nora",
+        "subtitle": "Accesos rápidos, seguimiento y contexto del proyecto.",
+        "actionEyebrow": "Panel",
+        "actionTitle": "Acciones",
+        "actionDescription": "Atajos para equipo, incidencias y gestión del proyecto.",
+        "logoUrl": "https://i.postimg.cc/J4Fy2Qsx/LOGO-(1).jpg",
+        "portalLogoLight": "https://i.postimg.cc/tR3YSryT/LOGO-NORA-NEGRO.png",
+        "portalLogoDark": "https://i.postimg.cc/SQ6JTZqj/LOGO-NORA-BLANCO.png",
+        "viewerLogoLight": "https://i.postimg.cc/L4r0gSvV/LOGO-TEXTO-NORA-NEGRO.png",
+        "viewerLogoDark": "https://i.postimg.cc/FFfBKzb8/LOGO-TEXTO-NORA-BLANCO.png"
+      },
+      "modules": {
+        "ifc": "VSR_IFCA/",
+        "status": "STATUS/",
+        "cantidades": "CANTIDADES/",
+        "pdf": "VSR_PDFA/",
+        "dwg": "VSR_DWGA/"
+      },
+      "actions": {
+        "publicaciones": "Publicaciones.html",
+        "solicitudes": "index.html",
+        "equipo": "equipo.html"
+      },
+      "dataSources": {
+        "driveFolderName": "Hospital Materno Infantil",
+        "driveFolderId": "1MhWc0DrvI0WY-j1ILswXqxcpzXSinUuy",
+        "driveScriptUrl": "",
+        "statusSheetId": "",
+        "statusScriptUrl": "",
+        "cantidadesSheetId": "",
+        "cantidadesScriptUrl": ""
+      },
+      "country": "Colombia",
+      "state": "Cundinamarca",
+      "city": "Bogotá",
+      "type": [
+        "Hospitalario"
+      ],
+      "description": "Adecuación y restauración del Hospital Matero Infantil.",
+      "client": "IMI",
+      "customTrialExpiry": "2027-07-03T04:59:59.999Z",
+      "customTrialUnit": "months",
+      "customTrialValue": 10
+    },
+    {
+      "name": "10 de septiembre",
+      "title": "NUEVO PROYECTO",
+      "slug": "nuevo-proyecto-1788523327621",
+      "status": "Planeacion",
+      "enabled": true,
+      "hasLicense": true,
+      "landing": {
+        "enabled": true,
+        "title": "NUEVO PROYECTO",
+        "map": {
+          "lat": 4.60971,
+          "lng": -74.08175,
+          "zoom": 15
+        },
+        "eyebrow": "nora",
+        "subtitle": "Accesos rápidos, seguimiento y contexto del proyecto.",
+        "actionEyebrow": "Panel",
+        "actionTitle": "Acciones",
+        "actionDescription": "Atajos para equipo, incidencias y gestión del proyecto.",
+        "logoUrl": "https://i.postimg.cc/J4Fy2Qsx/LOGO-(1).jpg",
+        "portalLogoLight": "https://i.postimg.cc/tR3YSryT/LOGO-NORA-NEGRO.png",
+        "portalLogoDark": "https://i.postimg.cc/SQ6JTZqj/LOGO-NORA-BLANCO.png",
+        "viewerLogoLight": "https://i.postimg.cc/L4r0gSvV/LOGO-TEXTO-NORA-NEGRO.png",
+        "viewerLogoDark": "https://i.postimg.cc/FFfBKzb8/LOGO-TEXTO-NORA-BLANCO.png"
+      },
+      "modules": {
+        "ifc": "VSR_IFCA/",
+        "status": "STATUS/",
+        "cantidades": "CANTIDADES/",
+        "pdf": "VSR_PDFA/",
+        "dwg": "VSR_DWGA/"
+      },
+      "actions": {
+        "publicaciones": "Publicaciones.html",
+        "solicitudes": "index.html",
+        "equipo": "equipo.html"
+      },
+      "dataSources": {
+        "driveFolderName": "10 de septiembre",
+        "driveFolderId": "1nNUjpaW2_mAawwqUV6krjvOwBCuYeuW9",
+        "driveScriptUrl": "",
+        "statusSheetId": "",
+        "statusScriptUrl": "",
+        "cantidadesSheetId": "",
+        "cantidadesScriptUrl": ""
+      }
+    }
+  ],
+  "portal": {
+    "name": "Mesh Estudio"
+  }
+}
